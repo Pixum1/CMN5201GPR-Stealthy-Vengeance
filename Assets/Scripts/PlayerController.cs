@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float acceleration = 70f; // The movement speed acceleration of the player
@@ -33,6 +33,7 @@ public class CharacterController : MonoBehaviour
 
     private bool jumpHeld;
     private Vector2 moveVal;
+
     public float m_HorizontalDir
     {
         get
@@ -104,14 +105,10 @@ public class CharacterController : MonoBehaviour
 
     public void OnMove(CallbackContext ctx)
     {
-        Debug.Log("Move");
-
         moveVal = ctx.ReadValue<Vector2>();
     }
     public void OnJump(CallbackContext ctx)
     {
-        Debug.Log("Jump");
-
         if (ctx.performed)
         {
             jumpBufferTimer = 0; //reset the jump buffer

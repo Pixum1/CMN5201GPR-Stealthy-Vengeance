@@ -5,7 +5,7 @@ using UnityEngine;
 public class CollisionCheck : MonoBehaviour
 {
     [SerializeField]
-    private CharacterController player;
+    private PlayerController player;
 
     [Header("Layer Masks")]
     [SerializeField]
