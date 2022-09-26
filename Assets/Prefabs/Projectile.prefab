@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Rb: {fileID: 6970141249066623765}
+  m_Damage: 1
 --- !u!58 &2112695659873490070
 CircleCollider2D:
   m_ObjectHideFlags: 0

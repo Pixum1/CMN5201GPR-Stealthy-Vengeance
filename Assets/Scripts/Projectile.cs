@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D m_Rb;
+    [SerializeField] private int m_Damage;
     public void Launch(Vector2 _dir, float _force, float _duration)
     {
         _dir.Normalize();
@@ -21,6 +22,8 @@ public class Projectile : MonoBehaviour
         if (_other.CompareTag("Projectile")) return;
 
         // Do damage!
+        _other.GetComponent<Health>()?.GetDamage(m_Damage);
+
 
         Destroy(this.gameObject);
     }

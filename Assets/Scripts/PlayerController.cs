@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private bool jumpHeld;
     private Vector2 moveVal;
 
+    [SerializeField] private Health m_Health;
+
     public float m_HorizontalDir
     {
         get
@@ -73,9 +75,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private void Start()
+    {
+        #region Add Death event
+        if (m_Health == null)
+            m_Health = GetComponent<Health>();
+
+        m_Health.E_TriggerDeath += PlayerDied;
+        #endregion
+    }
     private void Update()
     {
-
         if (cc.m_IsGrounded)
         {
             ApplyGroundLinearDrag();
@@ -99,6 +110,11 @@ public class PlayerController : MonoBehaviour
             Move();
         if (m_CanJump)
             Jump(jumpHeight, Vector2.up);
+    }
+
+    private void PlayerDied()
+    {
+        Debug.LogWarning("Player Dies");
     }
 
     #region Input
