@@ -6,8 +6,10 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D m_Rb;
     [SerializeField] private int m_Damage;
-    public void Launch(Vector2 _dir, float _force, float _duration)
+    private string ignoredTag;
+    public void Launch(Vector2 _dir, float _force, float _duration, string _ignoreTag)
     {
+        ignoredTag = _ignoreTag;
         _dir.Normalize();
         m_Rb.velocity = _dir * _force;
         Invoke("DeleteProjectile", _duration);
@@ -18,7 +20,7 @@ public class Projectile : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D _other)
     {
-        if (_other.CompareTag("Player")) return;
+        if (_other.CompareTag(ignoredTag)) return;
         if (_other.CompareTag("Projectile")) return;
 
         // Do damage!
