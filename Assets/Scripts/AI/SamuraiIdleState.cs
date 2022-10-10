@@ -9,7 +9,7 @@ public class SamuraiIdleState : AIState
 
     private Action switchIdleState;
     
-    public SamuraiIdleState(AIController _controller, Enemy _enemy, Action _switchIdleState) : base(_controller, _enemy)
+    public SamuraiIdleState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
         this.switchIdleState = _switchIdleState;
     }

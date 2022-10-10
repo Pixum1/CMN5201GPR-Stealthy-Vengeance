@@ -17,7 +17,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     // References
     public Health Health;
     public SpriteRenderer SpriteRenderer;
-    [HideInInspector] public Enemy EnemyData;
+    [HideInInspector] public EnemyData EnemyData;
 
     private void Start()
     {

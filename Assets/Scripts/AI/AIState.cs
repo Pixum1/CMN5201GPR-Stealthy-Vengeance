@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class AIState
 {
     protected AIController controller;
-    protected Enemy enemy;
+    protected EnemyData enemy;
 
-    public AIState(AIController _controller, Enemy _enemy)
+    public AIState(AIController _controller, EnemyData _enemy)
     {
         this.controller = _controller;
         this.enemy = _enemy;

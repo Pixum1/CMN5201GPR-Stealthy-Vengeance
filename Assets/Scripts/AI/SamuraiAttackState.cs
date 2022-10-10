@@ -9,7 +9,7 @@ public class SamuraiAttackState : AIState
     private float shootCooldownTimer;
     private float bulletLifeTime = 5f;
 
-    public SamuraiAttackState(AIController _controller, Enemy _enemy, Action _switchIdleState) : base(_controller, _enemy)
+    public SamuraiAttackState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
         this.switchIdleState = _switchIdleState;
     }

@@ -37,13 +37,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxSpeed = 12f; // The maximum speed of the player
     [SerializeField] private float groundLinDrag = 20f; // The friction applied when not moving <= decceleration
 
-    [Header("Jump Buffer")]
+    [Header("Buffer & Timer")]
     [SerializeField] private float jumpBufferTime = .1f; // The time window that allows the player to perform an action before it is allowed
     private float jumpBufferTimer = 1000f;
-
-    [Header("Coyote Time")]
     [SerializeField] private float coyoteTimeTime = .1f; // The time window in which the player can jump after walking over an edge
     private float coyoteTimeTimer = 1000f;
+    [SerializeField] private float dashBufferTime = .1f;
+    private float dashBufferTimer = 1000f;
 
     [Header("Jump")]
     [SerializeField] private float jumpHeight; // The jump height of the object in units(metres)
@@ -54,40 +54,29 @@ public class PlayerController : MonoBehaviour
     private int jumpsCounted;
     private Vector2 lastJumpPos;
 
+    [Header("Dash")]
+    [SerializeField] private float dashForce = 15f;
+    private bool isDashing;
+
+    [Header("References")]
     public Rigidbody2D RigidBody;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
 
     private bool jumpHeld;
     private Vector2 moveVal;
+    private Vector3 mousePos;
 
     [SerializeField] private Health m_Health;
 
     private Camera mainCam;
     private Mouse mouse;
-    public float m_HorizontalDir
-    {
-        get
-        {
-            return moveVal.x;
-        }
-    }
-    public bool m_ChangingDir
-    {
-        get
-        {
-            return (RigidBody.velocity.x > 0f && m_HorizontalDir < 0f)
-                   || (RigidBody.velocity.x < 0f && m_HorizontalDir > 0f);
-        }
-    }
-    public bool m_CanMove
-    {
-        get
-        {
-            return m_HorizontalDir != 0f;
-        }
-    }
-    public bool m_CanJump
+
+    private float horizontalDir => moveVal.x;
+    private bool changingDir => (RigidBody.velocity.x > 0f && horizontalDir < 0f)
+                                 || (RigidBody.velocity.x < 0f && horizontalDir > 0f);
+    private bool canMove => horizontalDir != 0f;
+    private bool canJump
     {
         get
         {
@@ -103,6 +92,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    private bool canDash => dashBufferTimer < dashBufferTime && !isDashing;
+    private bool facingRight;
 
     private void Awake()
     {
@@ -124,12 +115,18 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         #region Player Look at Mouse Position
-        Vector3 mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
+        mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
 
         if (mousePos.x < transform.position.x)
+        {
+            facingRight = false;
             m_SpriteRenderer.flipX = true;
+        }
         else if (mousePos.x > transform.position.x)
+        {
+            facingRight = true;
             m_SpriteRenderer.flipX = false;
+        }
         #endregion
 
 
@@ -139,25 +136,32 @@ public class PlayerController : MonoBehaviour
             ApplyGroundLinearDrag();
             jumpsCounted = 0; //reset jumps counter
             coyoteTimeTimer = 0; //reset coyote time counter
+            isDashing = false;
         }
         else
         {
             ApplyAirLinearDrag();
-
             ApplyFallGravity();
         }
         #endregion
 
         coyoteTimeTimer += Time.deltaTime;
         jumpBufferTimer += Time.deltaTime;
+        dashBufferTimer += Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
-        if (m_CanMove)
-            Move();
-        if (m_CanJump)
-            Jump(jumpHeight, Vector2.up);
+        if (canDash)
+            Dash(mousePos.x, mousePos.y);
+
+        if (!isDashing)
+        {
+            if (canMove)
+                Move();
+            if (canJump)
+                Jump(jumpHeight, Vector2.up);
+        }
     }
 
     private void PlayerDied()
@@ -183,12 +187,16 @@ public class PlayerController : MonoBehaviour
         if (ctx.canceled)
             jumpHeld = false;
     }
+    public void OnDash(CallbackContext ctx)
+    {
+        dashBufferTimer = 0;
+    }
 
     #endregion
 
     private void Move()
     {
-        RigidBody.AddForce(new Vector2(m_HorizontalDir, 0f) * acceleration);
+        RigidBody.AddForce(new Vector2(horizontalDir, 0f) * acceleration);
         if (Mathf.Abs(RigidBody.velocity.x) > maxSpeed)
             RigidBody.velocity = new Vector2(Mathf.Sign(RigidBody.velocity.x) * maxSpeed, RigidBody.velocity.y); //Clamp velocity when max speed is reached!
     }
@@ -221,13 +229,50 @@ public class PlayerController : MonoBehaviour
         RigidBody.AddForce(_dir * jumpForce, ForceMode2D.Impulse);
     }
 
+    private void Dash(float _x, float _y, bool directionBased = false)
+    {
+        Debug.Log("Start Dash");
+
+        isDashing = true;
+
+        RigidBody.velocity = Vector2.zero;
+        RigidBody.gravityScale = 0f;
+        RigidBody.drag = 0f;
+
+        Vector2 dir = Vector2.zero;
+
+        if (directionBased)
+        {
+            // Based on the moving direction of the player
+            if (_x != 0f || _y != 0f)
+                dir = new Vector2(_x, _y);
+            else
+            {
+                // Based on the direction the player faces
+                if (facingRight)
+                    dir = new Vector2(1, 0);
+                else
+                    dir = new Vector2(-1, 0);
+            }
+        }
+        else
+        {
+            // Based on position of x&y relative to the player
+            dir = new Vector2(_x - transform.position.x, _y - transform.position.y);
+        }
+
+        dir.Normalize();
+
+        RigidBody.AddForce(dir * dashForce, ForceMode2D.Impulse);
+    }
+
     #region Drag&Gravity
     /// <summary>
     /// Applies the ground friction based on wether the player is moving or giving no horizontal inputs
     /// </summary>
     private void ApplyGroundLinearDrag()
     {
-        if (Mathf.Abs(m_HorizontalDir) < .4f || m_ChangingDir)
+        if (Mathf.Abs(horizontalDir) < .4f || changingDir)
         {
             RigidBody.drag = groundLinDrag;
         }

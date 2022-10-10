@@ -10,7 +10,7 @@ public class SamuraiRoamingState : AIState
     private float roamExitTime = 10f;
     private float roamTimer;
 
-    public SamuraiRoamingState(AIController _controller, Enemy _enemy, Action _switchIdleState) : base(_controller, _enemy)
+    public SamuraiRoamingState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
         this.switchIdleState = _switchIdleState;
     }

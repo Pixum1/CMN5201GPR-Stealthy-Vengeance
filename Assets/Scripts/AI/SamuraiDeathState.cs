@@ -7,7 +7,7 @@ public class SamuraiDeathState : AIState
 {
     private Action switchIdleState;
 
-    public SamuraiDeathState(AIController _controller, Enemy _enemy, Action _switchIdleState) : base(_controller, _enemy)
+    public SamuraiDeathState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
         this.switchIdleState = _switchIdleState;
         _controller.Health.E_TriggerDeath += Die;
