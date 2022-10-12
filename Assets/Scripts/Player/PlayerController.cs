@@ -32,6 +32,23 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    [Header("Allow moves")]
+    [SerializeField] private bool allowMoving = true;
+    [SerializeField] private bool allowJumping = true;
+    [SerializeField] private bool allowDashing = false;
+    [SerializeField] private bool allowWallHang = false;
+    [SerializeField] private bool allowWallHops = false;
+    [SerializeField] private bool allowWallClimb = false;
+    [SerializeField] private bool lookAtMouse = false;
+
+    [HideInInspector] public bool AllowMoving { get { return allowMoving; } set { allowMoving = value; } }
+    [HideInInspector] public bool AllowJumping { get { return allowJumping; } set { allowJumping = value; } }
+    [HideInInspector] public bool AllowDashing { get { return allowDashing; } set { allowDashing = value; } }
+    [HideInInspector] public bool AllowWallHang { get { return allowWallHang; } set { allowWallHang = value; } }
+    [HideInInspector] public bool AllowWallHops { get { return allowWallHops; } set { allowWallHops = value; } }
+    [HideInInspector] public bool AllowWallClimb { get { return allowWallClimb; } set { allowWallClimb = value; } }
+    [HideInInspector] public int AmountOfJumps { get { return amountOfJumps; } set { amountOfJumps = Mathf.Clamp(value,1,10000); } }
+
     [Header("Movement")]
     [SerializeField] private float acceleration = 70f; // The movement speed acceleration of the player
     [SerializeField] private float maxSpeed = 12f; // The maximum speed of the player
@@ -44,6 +61,8 @@ public class PlayerController : MonoBehaviour
     private float coyoteTimeTimer = 1000f;
     [SerializeField] private float dashBufferTime = .1f;
     private float dashBufferTimer = 1000f;
+    [SerializeField] private float wallHopBufferTime = .1f; //The time window that allows the player to perform a wall jump after leaving the wall
+    private float wallHopBufferTimer = 1000f;
 
     [Header("Jump")]
     [SerializeField] private float jumpHeight; // The jump height of the object in units(metres)
@@ -56,44 +75,54 @@ public class PlayerController : MonoBehaviour
 
     [Header("Dash")]
     [SerializeField] private float dashForce = 15f;
+    [SerializeField] private float dashCooldown = 1.5f;
+    private float dashCDTimer = 1000f;
     private bool isDashing;
+
+    [Header("Wall Movement")]
+    [SerializeField] private float wallHopHeight = 1.5f;
+    [SerializeField] private float onWallGravityMultiplier;
+    [SerializeField] private float wallClimbAcceleration = 50f;
+    [SerializeField] private float wallClimbMaxSpeed = 6f;
 
     [Header("References")]
     public Rigidbody2D RigidBody;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
-
-    private bool jumpHeld;
-    private Vector2 moveVal;
-    private Vector3 mousePos;
-
-    [SerializeField] private Health m_Health;
-
+    public Health Health;
     private Camera mainCam;
     private Mouse mouse;
 
+    private bool facingRight;
+    private bool jumpHeld;
+    private bool wallHangHeld;
+
+    private Vector2 moveVal;
+    private Vector3 mousePos;
+
     private float horizontalDir => moveVal.x;
+    private float verticalDir => moveVal.y;
     private bool changingDir => (RigidBody.velocity.x > 0f && horizontalDir < 0f)
                                  || (RigidBody.velocity.x < 0f && horizontalDir > 0f);
-    private bool canMove => horizontalDir != 0f;
+    private bool canMove => allowMoving && horizontalDir != 0f;
     private bool canJump
     {
         get
         {
-            if (amountOfJumps > 1)
+            if (allowJumping)
             {
-                return jumpBufferTimer < jumpBufferTime
-                    && (coyoteTimeTimer < coyoteTimeTime || jumpsCounted < amountOfJumps);
+                if (amountOfJumps > 1)
+                    return jumpBufferTimer < jumpBufferTime && (coyoteTimeTimer < coyoteTimeTime || jumpsCounted < amountOfJumps);
+                else
+                    return jumpBufferTimer < jumpBufferTime && coyoteTimeTimer < coyoteTimeTime;
             }
             else
-            {
-                return jumpBufferTimer < jumpBufferTime
-                    && coyoteTimeTimer < coyoteTimeTime;
-            }
+                return false;
         }
     }
-    private bool canDash => dashBufferTimer < dashBufferTime && !isDashing;
-    private bool facingRight;
+    private bool canDash => allowDashing && dashBufferTimer < dashBufferTime && !isDashing && dashCDTimer >= dashCooldown;
+    private bool canWallHop => allowWallHops && wallHopBufferTimer < wallHopBufferTime;
+    private bool canWallHang => allowWallHang && wallHangHeld && (cc.m_IsOnLeftWall || cc.m_IsOnRightWall);
 
     private void Awake()
     {
@@ -106,31 +135,45 @@ public class PlayerController : MonoBehaviour
         mainCam = Camera.main;
 
         #region Add Death event
-        if (m_Health == null)
-            m_Health = GetComponent<Health>();
+        if (Health == null)
+            Health = GetComponent<Health>();
 
-        m_Health.E_TriggerDeath += PlayerDied;
+        Health.E_TriggerDeath += PlayerDied;
         #endregion
     }
     private void Update()
     {
-        #region Player Look at Mouse Position
         mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
 
-        if (mousePos.x < transform.position.x)
+        #region Player looking rotation
+        if (lookAtMouse)
         {
-            facingRight = false;
-            m_SpriteRenderer.flipX = true;
+            if (mousePos.x < transform.position.x)
+            {
+                facingRight = false;
+                m_SpriteRenderer.flipX = true;
+            }
+            else if (mousePos.x > transform.position.x)
+            {
+                facingRight = true;
+                m_SpriteRenderer.flipX = false;
+            }
         }
-        else if (mousePos.x > transform.position.x)
+        else
         {
-            facingRight = true;
-            m_SpriteRenderer.flipX = false;
+            if (horizontalDir < 0)
+            {
+                facingRight = false;
+                m_SpriteRenderer.flipX = true;
+            }
+            else if (horizontalDir > 0)
+            {
+                facingRight = true;
+                m_SpriteRenderer.flipX = false;
+            }
         }
         #endregion
 
-
-        #region Apply Drag & Gravity
         if (cc.m_IsGrounded)
         {
             ApplyGroundLinearDrag();
@@ -141,13 +184,31 @@ public class PlayerController : MonoBehaviour
         else
         {
             ApplyAirLinearDrag();
-            ApplyFallGravity();
-        }
-        #endregion
 
+            if (canWallHang)
+            {
+                isDashing = false;
+
+                ApplyWallHangGravity();
+
+                if (allowWallHops)
+                    jumpsCounted = amountOfJumps - 1;
+
+                if ((cc.m_IsOnLeftWall && horizontalDir > 0) || (cc.m_IsOnRightWall && horizontalDir < 0))
+                    wallHopBufferTimer = 0;
+            }
+            else
+                ApplyFallGravity();
+        }
+
+
+        #region Increase Buffer & Timer
         coyoteTimeTimer += Time.deltaTime;
         jumpBufferTimer += Time.deltaTime;
         dashBufferTimer += Time.deltaTime;
+        dashCDTimer += Time.deltaTime;
+        wallHopBufferTimer += Time.deltaTime;
+        #endregion
     }
 
     private void FixedUpdate()
@@ -155,10 +216,29 @@ public class PlayerController : MonoBehaviour
         if (canDash)
             Dash(mousePos.x, mousePos.y);
 
+        // has performed no dash
         if (!isDashing)
         {
             if (canMove)
                 Move();
+
+            if (canJump)
+            {
+                // Is on wall and jumps against it (climb with jumps)
+                if (canWallHang && canWallHop)
+                    Jump(wallHopHeight, new Vector2(-horizontalDir / 2f, 1f));
+                // Normal jump
+                else if (!canWallHang)
+                    Jump(jumpHeight, Vector2.up);
+            }
+            // is on wall and climbs it
+            if (canWallHang && allowWallClimb)
+                Climb();
+        }
+
+        // has performed a dash and has an additional jump ready
+        else if (isDashing && canJump)
+        {
             if (canJump)
                 Jump(jumpHeight, Vector2.up);
         }
@@ -191,12 +271,18 @@ public class PlayerController : MonoBehaviour
     {
         dashBufferTimer = 0;
     }
-
+    public void OnWallHang(CallbackContext ctx)
+    {
+        if (ctx.performed)
+            wallHangHeld = true;
+        if (ctx.canceled)
+            wallHangHeld = false;
+    }
     #endregion
 
     private void Move()
     {
-        RigidBody.AddForce(new Vector2(horizontalDir, 0f) * acceleration);
+        RigidBody.AddForce(new Vector2(horizontalDir, 0) * acceleration);
         if (Mathf.Abs(RigidBody.velocity.x) > maxSpeed)
             RigidBody.velocity = new Vector2(Mathf.Sign(RigidBody.velocity.x) * maxSpeed, RigidBody.velocity.y); //Clamp velocity when max speed is reached!
     }
@@ -214,6 +300,7 @@ public class PlayerController : MonoBehaviour
         lastJumpPos = transform.position;
         coyoteTimeTimer = coyoteTimeTime;
         jumpBufferTimer = jumpBufferTime;
+        wallHopBufferTimer = wallHopBufferTime;
         jumpsCounted++;
 
         ApplyAirLinearDrag();
@@ -231,39 +318,43 @@ public class PlayerController : MonoBehaviour
 
     private void Dash(float _x, float _y, bool directionBased = false)
     {
-        Debug.Log("Start Dash");
-
         isDashing = true;
+        dashCDTimer = 0;
 
         RigidBody.velocity = Vector2.zero;
         RigidBody.gravityScale = 0f;
         RigidBody.drag = 0f;
 
-        Vector2 dir = Vector2.zero;
+        Vector2 dir;
 
+        // Based on the moving direction of the player
         if (directionBased)
         {
-            // Based on the moving direction of the player
             if (_x != 0f || _y != 0f)
                 dir = new Vector2(_x, _y);
+
+            // Based on the direction the player faces
             else
             {
-                // Based on the direction the player faces
                 if (facingRight)
                     dir = new Vector2(1, 0);
                 else
                     dir = new Vector2(-1, 0);
             }
         }
+        // Based on position of x&y relative to the player
         else
-        {
-            // Based on position of x&y relative to the player
             dir = new Vector2(_x - transform.position.x, _y - transform.position.y);
-        }
 
         dir.Normalize();
 
         RigidBody.AddForce(dir * dashForce, ForceMode2D.Impulse);
+    }
+    private void Climb()
+    {
+        RigidBody.AddForce(new Vector2(0, verticalDir) * wallClimbAcceleration);
+        if (Mathf.Abs(RigidBody.velocity.y) > wallClimbMaxSpeed)
+            RigidBody.velocity = new Vector2(RigidBody.velocity.x, Mathf.Sign(RigidBody.velocity.y) * wallClimbMaxSpeed);
     }
 
     #region Drag&Gravity
@@ -305,6 +396,11 @@ public class PlayerController : MonoBehaviour
         {
             RigidBody.gravityScale = 1f;
         }
+    }
+    private void ApplyWallHangGravity()
+    {
+        RigidBody.gravityScale = onWallGravityMultiplier;
+        RigidBody.velocity = new Vector2(0, 0f); //set y velocity to 0
     }
     #endregion
 

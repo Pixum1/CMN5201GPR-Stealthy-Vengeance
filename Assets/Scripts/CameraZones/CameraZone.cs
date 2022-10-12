@@ -5,6 +5,7 @@ using System;
 
 public class CameraZone : MonoBehaviour
 {
+    public bool WasVisited = false;
     private bool isActive;
     public bool IsActive
     {
@@ -18,6 +19,7 @@ public class CameraZone : MonoBehaviour
             if (isActive)
             {
                 SpawnAllEnemies();
+                WasVisited = true;
             }
             else
             {
@@ -38,6 +40,7 @@ public class CameraZone : MonoBehaviour
 
     [SerializeField] private EnemyData[] m_Enemy;
     private List<GameObject> enemiesInRoom = new List<GameObject>();
+
 
     private void Awake()
     {
@@ -83,11 +86,6 @@ public class CameraZone : MonoBehaviour
         e.EnemyData = _enemy;
         e.transform.position = _enemy.SpawnPoint;
         enemiesInRoom.Add(e.gameObject);
-    }
-
-    private void OnDisable()
-    {
-        FindObjectOfType<ZoneManager>().RemoveZoneFromList(this);
     }
 
     private void OnDrawGizmos()

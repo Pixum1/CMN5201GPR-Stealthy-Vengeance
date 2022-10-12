@@ -6,10 +6,10 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     private int hp;
-    public int HP { get { return hp; } }
+    public int HP { get { return hp; } set { hp = value; } }
 
     [SerializeField] private int m_MaxHP;
-    public int MaxHP { get { return m_MaxHP; } }
+    public int MaxHP { get { return m_MaxHP; } set { m_MaxHP = value; } }
 
     public Action E_TriggerDeath;
 
