@@ -19,7 +19,10 @@ public class SamuraiRoamingState : AIState
     {
         roamTimer = roamExitTime;
 
-        targetDestination = enemy.Waypoints[UnityEngine.Random.Range(0, enemy.Waypoints.Length)];
+        targetDestination = controller.transform.position;
+
+        if (enemy.Waypoints.Length > 0)
+            targetDestination = enemy.Waypoints[UnityEngine.Random.Range(0, enemy.Waypoints.Length)];
     }
     public override void Update()
     {

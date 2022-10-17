@@ -91,6 +91,7 @@ public class SaveSystem : MonoBehaviour
             PlayerPosition = PlayerController.Instance.transform.position,
             PlayerHealth = PlayerController.Instance.Health.HP,
             AmountOfJumps = PlayerController.Instance.AmountOfJumps,
+            CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
         };
 
         return data;
@@ -100,6 +101,7 @@ public class SaveSystem : MonoBehaviour
         PlayerController.Instance.transform.position = _data.PlayerPosition;
         PlayerController.Instance.Health.HP = _data.PlayerHealth;
         PlayerController.Instance.AmountOfJumps = _data.AmountOfJumps;
+        GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
     }
 }
 public class SaveObject
@@ -108,4 +110,5 @@ public class SaveObject
     public Vector2 PlayerPosition;
     public int PlayerHealth;
     public int AmountOfJumps;
+    public List<Collectible> CollectedCollectibles;
 }

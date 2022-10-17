@@ -1,8 +1,1 @@
-{
-    "PlayerPosition": {
-        "x": 38.51000213623047,
-        "y": -3.985003709793091
-    },
-    "PlayerHealth": 5,
-    "AmountOfJumps": 1
-}
+{"PlayerPosition":{"x":33.68596267700195,"y":-3.985008478164673},"PlayerHealth":5,"AmountOfJumps":2,"CollectedCollectibles":[{"instanceID":-23878}]}

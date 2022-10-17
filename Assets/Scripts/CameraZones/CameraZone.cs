@@ -18,12 +18,12 @@ public class CameraZone : MonoBehaviour
 
             if (isActive)
             {
-                SpawnAllEnemies();
+                m_SpawnAbles.SpawnAll(enemiesInRoom);
                 WasVisited = true;
             }
             else
             {
-                DestroyAllEnemies();
+                m_SpawnAbles.DestroyAll(enemiesInRoom);
             }
         }
     }
@@ -38,7 +38,7 @@ public class CameraZone : MonoBehaviour
     }
     [SerializeField] private ERoomType m_RoomType;
 
-    [SerializeField] private EnemyData[] m_Enemy;
+    [SerializeField] private SpawnAbles m_SpawnAbles;
     private List<GameObject> enemiesInRoom = new List<GameObject>();
 
 
@@ -66,27 +66,6 @@ public class CameraZone : MonoBehaviour
             IsActive = false;
     }
 
-    public void SpawnAllEnemies()
-    {
-        for (int i = 0; i < m_Enemy.Length; i++)
-            SpawnEnemy(m_Enemy[i]);
-    }
-    public void DestroyAllEnemies()
-    {
-        for (int i = 0; i < enemiesInRoom.Count; i++)
-        {
-            if (enemiesInRoom[i] == null) continue;
-
-            Destroy(enemiesInRoom[i]);
-        }
-    }
-    private void SpawnEnemy(EnemyData _enemy)
-    {
-        AIController e = Instantiate(_enemy.EnemyPrefab);
-        e.EnemyData = _enemy;
-        e.transform.position = _enemy.SpawnPoint;
-        enemiesInRoom.Add(e.gameObject);
-    }
 
     private void OnDrawGizmos()
     {
@@ -99,17 +78,17 @@ public class CameraZone : MonoBehaviour
         #endregion
 
         #region Spawnpoints
-        if (m_Enemy != null)
+        if (m_SpawnAbles.Enemies != null)
         {
-            for (int i = 0; i < m_Enemy.Length; i++)
+            for (int i = 0; i < m_SpawnAbles.Enemies.Length; i++)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawWireCube(m_Enemy[i].SpawnPoint, Vector2.one);
+                Gizmos.DrawWireCube(m_SpawnAbles.Enemies[i].SpawnPoint, Vector2.one);
 
-                for (int k = 0; k < m_Enemy[i].Waypoints.Length; k++)
+                for (int k = 0; k < m_SpawnAbles.Enemies[i].Waypoints.Length; k++)
                 {
                     Gizmos.color = Color.red;
-                    Gizmos.DrawWireCube(m_Enemy[i].Waypoints[k], Vector2.one);
+                    Gizmos.DrawWireCube(m_SpawnAbles.Enemies[i].Waypoints[k], Vector2.one);
                 }
             }
         }
