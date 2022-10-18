@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     private PlayerInput playerInput;
-    public List<Collectible> CollectedCollectibles;
+    public List<Item> CollectedCollectibles;
 
     private void Awake()
     {

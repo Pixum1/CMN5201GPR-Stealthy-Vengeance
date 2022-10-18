@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public abstract class Collectible : MonoBehaviour, ICollectable
+public abstract class Item : MonoBehaviour, ICollectable
 {
-    protected bool Collected = false;
     private BoxCollider2D col;
+
+    protected bool Collected = false;
+    [HideInInspector] public bool Despawn = false;
+
+    [HideInInspector] public float despawnTime = 15f;
+    private float despawnTimer;
 
     private void Awake()
     {
         col = GetComponent<BoxCollider2D>();
         col.isTrigger = true;
-
     }
 
     private void Start()
@@ -20,6 +24,19 @@ public abstract class Collectible : MonoBehaviour, ICollectable
         SaveSystem.Instance.e_LoadGame += OnRespawn;
 
         OnRespawn();
+
+        despawnTimer = despawnTime;
+    }
+
+    private void Update()
+    {
+        if (Despawn)
+        {
+            despawnTimer -= Time.deltaTime;
+
+            if (despawnTimer <= 0)
+                Destroy(this.gameObject);
+        }
     }
 
     public abstract void OnCollect();
@@ -45,7 +62,8 @@ public abstract class Collectible : MonoBehaviour, ICollectable
     {
         if (_other.CompareTag("Player"))
         {
-            GameManager.Instance.CollectedCollectibles.Add(this);
+            if (!Despawn)
+                GameManager.Instance.CollectedCollectibles.Add(this);
 
             OnCollect();
             OnDelete();

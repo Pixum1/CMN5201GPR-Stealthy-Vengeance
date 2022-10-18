@@ -6,7 +6,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     private int hp;
-    public int HP { get { return hp; } set { hp = value; } }
+    public int HP { get { return hp; } set { if (hp < m_MaxHP) hp = value; } }
 
     [SerializeField] private int m_MaxHP;
     public int MaxHP { get { return m_MaxHP; } set { m_MaxHP = value; } }
@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
     {
         hp -= _amount;
 
-        if(hp<=0)
+        if (hp <= 0)
             E_TriggerDeath?.Invoke();
     }
 }

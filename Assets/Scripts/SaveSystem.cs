@@ -91,6 +91,12 @@ public class SaveSystem : MonoBehaviour
             PlayerPosition = PlayerController.Instance.transform.position,
             PlayerHealth = PlayerController.Instance.Health.HP,
             AmountOfJumps = PlayerController.Instance.AmountOfJumps,
+            AllowWallClimb = PlayerController.Instance.AllowWallClimb,
+            AllowWallHang = PlayerController.Instance.AllowWallHang,
+            AllowWallHops = PlayerController.Instance.AllowWallHops,
+            AllowDashing = PlayerController.Instance.AllowDashing,
+            AllowJumping = PlayerController.Instance.AllowJumping,
+            AllowMoving = PlayerController.Instance.AllowMoving,
             CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
         };
 
@@ -101,6 +107,12 @@ public class SaveSystem : MonoBehaviour
         PlayerController.Instance.transform.position = _data.PlayerPosition;
         PlayerController.Instance.Health.HP = _data.PlayerHealth;
         PlayerController.Instance.AmountOfJumps = _data.AmountOfJumps;
+        PlayerController.Instance.AllowWallClimb = _data.AllowWallClimb;
+        PlayerController.Instance.AllowWallHang = _data.AllowWallHang;
+        PlayerController.Instance.AllowWallHops = _data.AllowWallHops;
+        PlayerController.Instance.AllowDashing = _data.AllowDashing;
+        PlayerController.Instance.AllowJumping = _data.AllowJumping;
+        PlayerController.Instance.AllowMoving = _data.AllowMoving;
         GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
     }
 }
@@ -110,5 +122,11 @@ public class SaveObject
     public Vector2 PlayerPosition;
     public int PlayerHealth;
     public int AmountOfJumps;
-    public List<Collectible> CollectedCollectibles;
+    public bool AllowWallClimb;
+    public bool AllowWallHang;
+    public bool AllowWallHops;
+    public bool AllowDashing;
+    public bool AllowJumping;
+    public bool AllowMoving;
+    public List<Item> CollectedCollectibles;
 }

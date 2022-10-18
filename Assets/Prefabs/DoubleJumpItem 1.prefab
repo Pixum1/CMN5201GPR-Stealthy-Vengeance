@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 29206962419085949}
   - component: {fileID: 29206962419085946}
   - component: {fileID: 29206962419085947}
-  - component: {fileID: 29206962419085944}
+  - component: {fileID: -5288342506557661241}
   m_Layer: 0
-  m_Name: DoubleJumpItem
+  m_Name: DoubleJumpItem 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.48317027, a: 1}
+  m_Color: {r: 0.9876554, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &29206962419085944
+--- !u!114 &-5288342506557661241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 29206962419085945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a43cbae2c0ba8e24d851dbb60388712f, type: 3}
+  m_Script: {fileID: 11500000, guid: ce5668536ef344c4abbd8582f829384d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Despawn: 0
-  despawnTime: 0
+  despawnTime: 15
