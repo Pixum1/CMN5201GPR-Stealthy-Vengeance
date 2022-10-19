@@ -15,21 +15,29 @@ public class CameraZone : MonoBehaviour
             if (value == isActive) return;
 
             isActive = value;
+            WasVisited = true;
 
-            if (isActive)
+            switch (m_RoomType)
             {
-                m_SpawnAbles.SpawnAll(enemiesInRoom);
-                WasVisited = true;
-            }
-            else
-            {
-                m_SpawnAbles.DestroyAll(enemiesInRoom);
+                case ERoomType.normal:
+                    if (isActive)
+                        m_SpawnAbles.SpawnAll(enemiesInRoom);
+                    else
+                        m_SpawnAbles.DestroyAll(enemiesInRoom);
+                    break;
+                case ERoomType.boss:
+                    if (isActive)
+                        StartEvent();
+                    break;
             }
         }
     }
-    [SerializeField] public LayerMask playerLayer;
-    [HideInInspector] public Collider col;
-    [SerializeField] public float cameraOrthographicSize = 11;
+    [SerializeField]
+    public LayerMask playerLayer;
+    [HideInInspector]
+    public Collider col;
+    [SerializeField]
+    public float cameraOrthographicSize = 11;
 
     private enum ERoomType
     {
@@ -39,6 +47,7 @@ public class CameraZone : MonoBehaviour
     [SerializeField] private ERoomType m_RoomType;
 
     [SerializeField] private SpawnAbles m_SpawnAbles;
+    [SerializeField] private EnemyWave[] m_Waves;
     private List<GameObject> enemiesInRoom = new List<GameObject>();
 
 
@@ -65,7 +74,17 @@ public class CameraZone : MonoBehaviour
         else
             IsActive = false;
     }
+    private void StartEvent()
+    {
+        // Close entrances
 
+        // Player moves to middle of the screen
+
+        // Start Wave 1 & wait untill the player killed all enemies of that wave
+        // then start Wave 2 and vice versa
+
+        StartCoroutine(m_Waves[0].StartWave());
+    }
 
     private void OnDrawGizmos()
     {
@@ -90,6 +109,15 @@ public class CameraZone : MonoBehaviour
                     Gizmos.color = Color.red;
                     Gizmos.DrawWireCube(m_SpawnAbles.Enemies[i].Waypoints[k], Vector2.one);
                 }
+            }
+        }
+
+        for (int i = 0; i < m_Waves.Length; i++)
+        {
+            for (int k = 0; k < m_Waves[i].Spawnpoints.Length; k++)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireCube(m_Waves[i].Spawnpoints[k], Vector2.one);
             }
         }
         #endregion

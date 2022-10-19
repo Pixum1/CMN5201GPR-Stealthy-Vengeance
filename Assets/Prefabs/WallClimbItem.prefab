@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 29206962419085947}
   - component: {fileID: -5288342506557661241}
   m_Layer: 0
-  m_Name: DoubleJumpItem 1
+  m_Name: WallClimbItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

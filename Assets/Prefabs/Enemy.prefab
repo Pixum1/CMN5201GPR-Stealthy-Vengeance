@@ -114,13 +114,14 @@ MonoBehaviour:
     EnemyPrefab: {fileID: 2271130227691108440}
     SpawnPoint: {x: 0, y: 0}
     IdleTime: 1
-    RoamSpeed: 3
+    Speed: 0
     Waypoints: []
     ProjectilePrefab: {fileID: 1827334929654878298, guid: 8baf2c1441f84504394e02a4b0ad9a6d, type: 3}
     ShootForce: 3
     ShootCooldown: 0.5
     AttackRange: 5
     VisionRange: 10
+    Drops: []
 --- !u!1 &7262624198383323702
 GameObject:
   m_ObjectHideFlags: 0

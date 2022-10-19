@@ -37,7 +37,7 @@ public class SamuraiAttackState : AIState
             Vector2 destination = new Vector2(PlayerController.Instance.transform.position.x, controller.transform.position.y);
 
             controller.transform.position = Vector3.MoveTowards(controller.transform.position, destination,
-                   enemy.RoamSpeed * Time.deltaTime);
+                   enemy.Speed * Time.deltaTime);
         }
     }
     public override void Exit()

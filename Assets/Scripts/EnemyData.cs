@@ -9,7 +9,7 @@ public struct EnemyData
     public Vector2 SpawnPoint;
 
     public float IdleTime;
-    public float RoamSpeed;
+    public float Speed;
     public Vector2[] Waypoints;
 
     [Header("Combat")]
@@ -21,6 +21,21 @@ public struct EnemyData
     public float VisionRange;
 
     public Drops[] Drops;
+
+    public EnemyData(AIController _prefab, Vector2 _spawnpoint, float _idleTime, float _speed, Vector2[] _waypoints, Projectile _projectile, float _shootForce, float _shootCD, float _attRange, float _visionRange, Drops[] _drops)
+    {
+        EnemyPrefab = _prefab;
+        SpawnPoint = _spawnpoint;
+        IdleTime = _idleTime;
+        Speed = _speed;
+        Waypoints = _waypoints;
+        ProjectilePrefab = _projectile;
+        ShootForce = _shootForce;
+        ShootCooldown = _shootCD;
+        AttackRange = _attRange;
+        VisionRange = _visionRange;
+        Drops = _drops;
+    }
 
     public void Spawn(List<GameObject> _enemyList)
     {

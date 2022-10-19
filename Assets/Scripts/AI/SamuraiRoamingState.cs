@@ -21,8 +21,13 @@ public class SamuraiRoamingState : AIState
 
         targetDestination = controller.transform.position;
 
-        if (enemy.Waypoints.Length > 0)
-            targetDestination = enemy.Waypoints[UnityEngine.Random.Range(0, enemy.Waypoints.Length)];
+        if (enemy.Waypoints == null)
+            switchIdleState.Invoke();
+        else
+        {
+            if (enemy.Waypoints.Length > 0)
+                targetDestination = enemy.Waypoints[UnityEngine.Random.Range(0, enemy.Waypoints.Length)];
+        }
     }
     public override void Update()
     {
@@ -30,7 +35,7 @@ public class SamuraiRoamingState : AIState
             switchIdleState.Invoke();
         else
             controller.transform.position = Vector3.MoveTowards(controller.transform.position, targetDestination,
-                enemy.RoamSpeed * Time.deltaTime);
+                enemy.Speed * Time.deltaTime);
 
         if (roamTimer <= 0)
             switchIdleState.Invoke();
