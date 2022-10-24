@@ -19,6 +19,8 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     public SpriteRenderer SpriteRenderer;
     [HideInInspector] public EnemyData EnemyData;
 
+    public LayerMask layermask;
+
     private void Start()
     {
         InitializeFSM();
@@ -80,13 +82,16 @@ public abstract class AIController : MonoBehaviour, IAIControlls
         {
             Ray2D ray = new Ray2D(transform.position, PlayerController.Instance.transform.position - transform.position);
 
-            if (Physics2D.Raycast(ray.origin, ray.direction, EnemyData.VisionRange).collider.CompareTag("Player"))
+            if (!Physics2D.Raycast(ray.origin, ray.direction, Vector2.Distance(transform.position, PlayerController.Instance.transform.position), LayerMask.GetMask("Obstacle")))
             {
-                Debug.DrawRay(ray.origin, ray.direction * EnemyData.VisionRange, Color.red);
+                Debug.DrawRay(ray.origin, ray.direction * Vector2.Distance(transform.position, PlayerController.Instance.transform.position), Color.red);
                 SeesPlayer = true;
             }
             else
+            {
+                Debug.DrawRay(ray.origin, ray.direction * Vector2.Distance(transform.position, PlayerController.Instance.transform.position), Color.yellow);
                 SeesPlayer = false;
+            }
         }
         else
         {

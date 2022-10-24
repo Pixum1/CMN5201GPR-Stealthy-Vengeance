@@ -15,7 +15,6 @@ public class CameraZone : MonoBehaviour
             if (value == isActive) return;
 
             isActive = value;
-            WasVisited = true;
 
             switch (m_RoomType)
             {
@@ -26,10 +25,12 @@ public class CameraZone : MonoBehaviour
                         m_SpawnAbles.DestroyAll(enemiesInRoom);
                     break;
                 case ERoomType.boss:
-                    if (isActive)
-                        StartEvent();
+                    if (isActive && !WasVisited)
+                        StartCoroutine(StartEvent());
                     break;
             }
+
+            WasVisited = true;
         }
     }
     [SerializeField]
@@ -47,9 +48,10 @@ public class CameraZone : MonoBehaviour
     [SerializeField] private ERoomType m_RoomType;
 
     [SerializeField] private SpawnAbles m_SpawnAbles;
-    [SerializeField] private EnemyWave[] m_Waves;
+    [SerializeField] private EnemyWaves[] m_Waves;
+    [SerializeField] private Vector2[] m_WavePositions;
+    [SerializeField] private GameObject[] EntranceBarriers;
     private List<GameObject> enemiesInRoom = new List<GameObject>();
-
 
     private void Awake()
     {
@@ -74,16 +76,66 @@ public class CameraZone : MonoBehaviour
         else
             IsActive = false;
     }
-    private void StartEvent()
+    private IEnumerator StartEvent()
     {
-        // Close entrances
+        Debug.Log("Event started");
 
         // Player moves to middle of the screen
+        StartCoroutine(MovePlayerToPos(new Vector2(transform.position.x, PlayerController.Instance.transform.position.y)));
 
-        // Start Wave 1 & wait untill the player killed all enemies of that wave
-        // then start Wave 2 and vice versa
+        yield return new WaitUntil(() => Mathf.Abs(PlayerController.Instance.transform.position.x - transform.position.x) <= 1f);
+        // Close entrances
+        CloseEntrance();
 
-        StartCoroutine(m_Waves[0].StartWave());
+        // Start Wave 1 & wait untill all enemies of that wave spawned
+        // Then spawn next Wave
+        for (int i = 0; i < m_Waves.Length; i++)
+        {
+            StartCoroutine(m_Waves[i].StartWave(enemiesInRoom, m_WavePositions));
+            yield return new WaitUntil(() => m_Waves[i].IsFinished); // Doesn't work
+        }
+
+    }
+
+    private IEnumerator MovePlayerToPos(Vector2 _pos)
+    {
+        PlayerController p = PlayerController.Instance;
+        bool save = p.LookAtMouse;
+
+        p.IsInEvent = true;
+        p.LookAtMouse = false;
+
+        Rigidbody2D rb = PlayerController.Instance.RigidBody;
+        rb.velocity = Vector2.zero;
+
+        float xDir = Mathf.Sign(_pos.x - p.transform.position.x);
+        float acceleration = 70f;
+        float maxSpeed = 7f;
+
+        while (((Vector2)p.transform.position - _pos).sqrMagnitude > 1f)
+        {
+            rb.velocity = Vector2.right * xDir * acceleration;
+            if (Mathf.Abs(rb.velocity.x) > maxSpeed)
+                rb.velocity = new Vector2(Mathf.Sign(rb.velocity.x) * maxSpeed, rb.velocity.y); //Clamp velocity when max speed is reached!
+
+            yield return null;
+        }
+
+        rb.velocity = Vector2.zero;
+
+        p.LookAtMouse = save;
+        p.IsInEvent = false;
+    }
+
+    private void CloseEntrance()
+    {
+        for (int i = 0; i < EntranceBarriers.Length; i++)
+            EntranceBarriers[i].SetActive(true);
+    }
+    private void OpenEntrance()
+    {
+        for (int i = 0; i < EntranceBarriers.Length; i++)
+            EntranceBarriers[i].SetActive(false);
     }
 
     private void OnDrawGizmos()
@@ -111,13 +163,12 @@ public class CameraZone : MonoBehaviour
                 }
             }
         }
-
-        for (int i = 0; i < m_Waves.Length; i++)
+        if (m_WavePositions != null)
         {
-            for (int k = 0; k < m_Waves[i].Spawnpoints.Length; k++)
+            for (int k = 0; k < m_WavePositions.Length; k++)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireCube(m_Waves[i].Spawnpoints[k], Vector2.one);
+                Gizmos.DrawWireCube(m_WavePositions[k], Vector2.one);
             }
         }
         #endregion

@@ -22,26 +22,18 @@ public struct EnemyData
 
     public Drops[] Drops;
 
-    public EnemyData(AIController _prefab, Vector2 _spawnpoint, float _idleTime, float _speed, Vector2[] _waypoints, Projectile _projectile, float _shootForce, float _shootCD, float _attRange, float _visionRange, Drops[] _drops)
-    {
-        EnemyPrefab = _prefab;
-        SpawnPoint = _spawnpoint;
-        IdleTime = _idleTime;
-        Speed = _speed;
-        Waypoints = _waypoints;
-        ProjectilePrefab = _projectile;
-        ShootForce = _shootForce;
-        ShootCooldown = _shootCD;
-        AttackRange = _attRange;
-        VisionRange = _visionRange;
-        Drops = _drops;
-    }
-
     public void Spawn(List<GameObject> _enemyList)
     {
         AIController e = GameObject.Instantiate(EnemyPrefab);
         e.EnemyData = this;
         e.transform.position = SpawnPoint;
+        _enemyList.Add(e.gameObject);
+    }
+    public void SpawnAt(List<GameObject> _enemyList, Vector2 _spawnPoint)
+    {
+        AIController e = GameObject.Instantiate(EnemyPrefab);
+        e.EnemyData = this;
+        e.transform.position = _spawnPoint;
         _enemyList.Add(e.gameObject);
     }
     public void SpawnDrops(Vector2 _position)

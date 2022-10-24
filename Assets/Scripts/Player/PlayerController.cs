@@ -41,13 +41,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool allowWallClimb = false;
     [SerializeField] private bool lookAtMouse = false;
 
+    public bool IsInEvent;
+
     [HideInInspector] public bool AllowMoving { get { return allowMoving; } set { allowMoving = value; } }
     [HideInInspector] public bool AllowJumping { get { return allowJumping; } set { allowJumping = value; } }
     [HideInInspector] public bool AllowDashing { get { return allowDashing; } set { allowDashing = value; } }
     [HideInInspector] public bool AllowWallHang { get { return allowWallHang; } set { allowWallHang = value; } }
     [HideInInspector] public bool AllowWallHops { get { return allowWallHops; } set { allowWallHops = value; } }
     [HideInInspector] public bool AllowWallClimb { get { return allowWallClimb; } set { allowWallClimb = value; } }
-    [HideInInspector] public int AmountOfJumps { get { return amountOfJumps; } set { amountOfJumps = Mathf.Clamp(value,1,10000); } }
+    [HideInInspector] public int AmountOfJumps { get { return amountOfJumps; } set { amountOfJumps = Mathf.Clamp(value, 1, 10000); } }
+    [HideInInspector] public bool LookAtMouse { get { return lookAtMouse; } set { lookAtMouse = value; } }
 
     [Header("Movement")]
     [SerializeField] private float acceleration = 70f; // The movement speed acceleration of the player
@@ -174,6 +177,8 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
+        if (IsInEvent) return; // !!!DONT RUN CODE BELOW IF IS IN EVENT!!!
+
         if (cc.m_IsGrounded)
         {
             ApplyGroundLinearDrag();
@@ -213,6 +218,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (IsInEvent) return; // !!!DONT RUN CODE BELOW IF IS IN EVENT!!!
+
         if (canDash)
             Dash(mousePos.x, mousePos.y);
 
@@ -220,7 +227,7 @@ public class PlayerController : MonoBehaviour
         if (!isDashing)
         {
             if (canMove)
-                Move();
+                Move(horizontalDir);
 
             if (canJump)
             {
@@ -255,7 +262,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(CallbackContext ctx)
     {
-        moveVal = ctx.ReadValue<Vector2>();
+        if (allowMoving)
+            moveVal = ctx.ReadValue<Vector2>();
+        else
+            moveVal = Vector2.zero;
     }
     public void OnJump(CallbackContext ctx)
     {
@@ -280,9 +290,10 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void Move()
+    private void Move(float _xDir)
     {
-        RigidBody.AddForce(new Vector2(horizontalDir, 0) * acceleration);
+        Debug.Log("Move");
+        RigidBody.AddForce(new Vector2(_xDir, 0) * acceleration);
         if (Mathf.Abs(RigidBody.velocity.x) > maxSpeed)
             RigidBody.velocity = new Vector2(Mathf.Sign(RigidBody.velocity.x) * maxSpeed, RigidBody.velocity.y); //Clamp velocity when max speed is reached!
     }
