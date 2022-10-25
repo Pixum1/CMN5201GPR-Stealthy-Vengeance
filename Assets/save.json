@@ -1,1 +1,37 @@
-{"PlayerPosition":{"x":-33.43009948730469,"y":11.014984130859375},"PlayerHealth":1,"AmountOfJumps":2,"AllowWallClimb":true,"AllowWallHang":true,"AllowWallHops":false,"AllowDashing":false,"AllowJumping":true,"AllowMoving":true,"CollectedCollectibles":[{"instanceID":-1292},{"instanceID":-1302}]}
+{
+    "PlayerPosition": {
+        "x": -71.55623626708985,
+        "y": 17.940034866333009
+    },
+    "PlayerHealth": 3,
+    "AmountOfJumps": 1,
+    "AllowWallClimb": true,
+    "AllowWallHang": true,
+    "AllowWallHops": false,
+    "AllowDashing": false,
+    "AllowJumping": true,
+    "AllowMoving": true,
+    "CollectedCollectibles": [],
+    "CameraZones": [
+        {
+            "ZoneID": 5,
+            "WasVisited": true
+        },
+        {
+            "ZoneID": 4,
+            "WasVisited": true
+        },
+        {
+            "ZoneID": 3,
+            "WasVisited": true
+        },
+        {
+            "ZoneID": 1,
+            "WasVisited": true
+        },
+        {
+            "ZoneID": 0,
+            "WasVisited": true
+        }
+    ]
+}

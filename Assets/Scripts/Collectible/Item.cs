@@ -38,7 +38,10 @@ public abstract class Item : MonoBehaviour, ICollectable
                 Destroy(this.gameObject);
         }
     }
-
+    public void Spawn()
+    {
+        this.gameObject.SetActive(true);
+    }
     public abstract void OnCollect();
     public virtual void OnDelete()
     {

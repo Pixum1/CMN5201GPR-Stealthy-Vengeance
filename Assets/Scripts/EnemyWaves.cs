@@ -8,9 +8,8 @@ public struct EnemyWaves
     public EnemyData[] EnemyTypes;
     public int AmountOfEnemies;
     public float TimeBetweenEnemySpawns;
-    public bool IsFinished;
 
-    public IEnumerator StartWave(List<GameObject> _enemyList, Vector2[] _locations)
+    public IEnumerator StartWave(List<GameObject> _enemyList, Vector2Int[] _locations)
     {
         for (int i = 0; i < AmountOfEnemies; i++)
         {
@@ -20,6 +19,6 @@ public struct EnemyWaves
             EnemyTypes[type].SpawnAt(_enemyList, _locations[location]);
             yield return new WaitForSeconds(TimeBetweenEnemySpawns);
         }
-        IsFinished = true;
+        Debug.LogWarning("Wave is Finished");
     }
 }

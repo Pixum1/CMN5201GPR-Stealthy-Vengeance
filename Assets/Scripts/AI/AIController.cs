@@ -23,6 +23,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
 
     private void Start()
     {
+        Health.SetHP(EnemyData.HP);
         InitializeFSM();
     }
     private void Update()
@@ -32,30 +33,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     }
 
     /// <summary>
-    /// Create new States here. Example Below
-    /// 
-    /// IdleState idleState = new IdleState(this, SwitchIdleState);
-    /// RoamingState roamingState = new RoamingState(this, SwitchIdleState);
-    /// 
-    /// Create new Exit Conditions here. Example below
-    /// 
-    /// StateDictionary = new Dictionary<AIState, Dictionary<StateMachineSwitchDelegate, AIState>>()
-    /// {
-    ///     {
-    ///         idleState,
-    ///         new Dictionary<StateMachineSwitchDelegate, AIState>
-    ///          {
-    ///              {()=> !CurrIdleState, roamingState },
-    ///          }
-    ///      },
-    ///     {
-    ///          roamingState,
-    ///         new Dictionary<StateMachineSwitchDelegate, AIState>
-    ///         {
-    ///              {()=> CurrIdleState, idleState },
-    ///         }
-    ///     },
-    ///  }
+    /// Create new States and conditions here.
     /// </summary>
     public abstract void InitializeFSM();
     public void UpdateFSM()
@@ -78,7 +56,9 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     }
     public virtual void UpdateLogic()
     {
-        if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= EnemyData.VisionRange)
+        float range = (transform.position - PlayerController.Instance.transform.position).sqrMagnitude;
+
+        if (range <= Mathf.Pow(EnemyData.VisionRange, 2))
         {
             Ray2D ray = new Ray2D(transform.position, PlayerController.Instance.transform.position - transform.position);
 

@@ -5,10 +5,10 @@ using UnityEngine;
 public class ZoneManager : MonoBehaviour
 {
     [SerializeField] public LayerMask playerLayer;
+    [SerializeField] private Vector2 standardSize = new Vector2(40,22);
 
     [Header("Visualization")]
-    [SerializeField, Range(.1f, 1f)] private float m_Scale = .5f;
-    [SerializeField] private Vector2 m_Position = Vector2.zero;
+    private ushort id;
 
     /// <summary>
     /// Creates a new CameraZone and returns it.
@@ -18,10 +18,12 @@ public class ZoneManager : MonoBehaviour
     {
         GameObject zone = new GameObject("CameraZone");
         zone.transform.SetParent(transform);
-        zone.transform.localScale = new Vector3(40, 22f, 1);
+        zone.transform.localScale = standardSize;
         zone.AddComponent<BoxCollider>().isTrigger = true;
         CameraZone z = zone.AddComponent<CameraZone>();
         z.playerLayer = playerLayer;
+        z.ID = id;
+        id++;
         return zone;
     }
 }

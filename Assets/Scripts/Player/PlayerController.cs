@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
     public Health Health;
+    [SerializeField] private int m_MaxHP;
     private Camera mainCam;
     private Mouse mouse;
 
@@ -108,7 +109,7 @@ public class PlayerController : MonoBehaviour
     private bool changingDir => (RigidBody.velocity.x > 0f && horizontalDir < 0f)
                                  || (RigidBody.velocity.x < 0f && horizontalDir > 0f);
     private bool canMove => allowMoving && horizontalDir != 0f;
-    private bool canJump
+    public bool canJump
     {
         get
         {
@@ -134,6 +135,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Health.SetHP(m_MaxHP);
+
         mouse = Mouse.current;
         mainCam = Camera.main;
 
@@ -292,7 +295,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move(float _xDir)
     {
-        Debug.Log("Move");
         RigidBody.AddForce(new Vector2(_xDir, 0) * acceleration);
         if (Mathf.Abs(RigidBody.velocity.x) > maxSpeed)
             RigidBody.velocity = new Vector2(Mathf.Sign(RigidBody.velocity.x) * maxSpeed, RigidBody.velocity.y); //Clamp velocity when max speed is reached!

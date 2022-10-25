@@ -6,11 +6,13 @@ public struct EnemyData
 {
     public AIController EnemyPrefab;
 
-    public Vector2 SpawnPoint;
+    public Vector2Int SpawnPoint;
+
+    public int HP;
 
     public float IdleTime;
     public float Speed;
-    public Vector2[] Waypoints;
+    public Vector2Int[] Waypoints;
 
     [Header("Combat")]
     public Projectile ProjectilePrefab;
@@ -26,7 +28,7 @@ public struct EnemyData
     {
         AIController e = GameObject.Instantiate(EnemyPrefab);
         e.EnemyData = this;
-        e.transform.position = SpawnPoint;
+        e.transform.position = (Vector2)SpawnPoint;
         _enemyList.Add(e.gameObject);
     }
     public void SpawnAt(List<GameObject> _enemyList, Vector2 _spawnPoint)
@@ -40,28 +42,6 @@ public struct EnemyData
     {
         for (int i = 0; i < Drops.Length; i++)
             Drops[i].Drop(_position);
-    }
-}
-[System.Serializable]
-public struct SpawnAbles
-{
-    public EnemyData[] Enemies;
-
-    public void SpawnAll(List<GameObject> _enemyList)
-    {
-        for (int i = 0; i < Enemies.Length; i++)
-        {
-            Enemies[i].Spawn(_enemyList);
-        }
-    }
-    public void DestroyAll(List<GameObject> _enemyList)
-    {
-        for (int i = 0; i < _enemyList.Count; i++)
-        {
-            if (_enemyList[i] == null) continue;
-
-            GameObject.Destroy(_enemyList[i]);
-        }
     }
 }
 [System.Serializable]

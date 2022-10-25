@@ -5,6 +5,7 @@ using System;
 
 public class CameraZone : MonoBehaviour
 {
+    public ushort ID;
     public bool WasVisited = false;
     private bool isActive;
     public bool IsActive
@@ -16,13 +17,28 @@ public class CameraZone : MonoBehaviour
 
             isActive = value;
 
+            // if this is the first time visiting this room
+            if (!WasVisited)
+            {
+                if (GameManager.Instance != null)
+                    for (int i = 0; i < GameManager.Instance.ZoneSaves.Count; i++)
+                    {
+                        // Find this zone in the GameManagers zone list
+                        if (GameManager.Instance.ZoneSaves[i].ZoneID != ID) continue;
+
+                        // Create a new data object at the location in the list
+                        GameManager.Instance.ZoneSaves[i] = new CameraZoneSaveData(ID, true);
+                        Debug.Log("Set new Values for room " + ID);
+                    }
+            }
+
             switch (m_RoomType)
             {
                 case ERoomType.normal:
                     if (isActive)
-                        m_SpawnAbles.SpawnAll(enemiesInRoom);
+                        SpawnAll(enemiesInRoom);
                     else
-                        m_SpawnAbles.DestroyAll(enemiesInRoom);
+                        DestroyAll(enemiesInRoom);
                     break;
                 case ERoomType.boss:
                     if (isActive && !WasVisited)
@@ -33,24 +49,36 @@ public class CameraZone : MonoBehaviour
             WasVisited = true;
         }
     }
-    [SerializeField]
-    public LayerMask playerLayer;
-    [HideInInspector]
-    public Collider col;
-    [SerializeField]
-    public float cameraOrthographicSize = 11;
 
-    private enum ERoomType
+    [SerializeField] public LayerMask playerLayer;
+    [HideInInspector] public Collider col;
+    [SerializeField] public float cameraOrthographicSize = 11;
+
+    public enum ERoomType
     {
         normal,
         boss,
     }
-    [SerializeField] private ERoomType m_RoomType;
+    [SerializeField] public ERoomType m_RoomType;
 
-    [SerializeField] private SpawnAbles m_SpawnAbles;
+    [Header("Normal Room")]
+    [SerializeField] public EnemyData[] m_Enemies;
+
+    [Header("Boss Room")]
     [SerializeField] private EnemyWaves[] m_Waves;
-    [SerializeField] private Vector2[] m_WavePositions;
-    [SerializeField] private GameObject[] EntranceBarriers;
+    [SerializeField] private Vector2Int[] m_WavePositions;
+    [SerializeField] private GameObject[] m_EntranceBarriers;
+    private enum EUnlockAbility
+    {
+        none,
+        wallHang,
+        wallClimb,
+        wallHop,
+        doubleJump,
+        dash,
+    }
+    [SerializeField] private EUnlockAbility m_UnlockAbility;
+
     private List<GameObject> enemiesInRoom = new List<GameObject>();
 
     private void Awake()
@@ -59,9 +87,21 @@ public class CameraZone : MonoBehaviour
         CheckForPlayer();
     }
 
+    private void Start()
+    {
+        // Register this room to the GameManager
+        GameManager.Instance.ZoneSaves.Add(new CameraZoneSaveData(ID, WasVisited));
+    }
+
     private void Update()
     {
         CheckForPlayer();
+
+        for (int i = 0; i < enemiesInRoom.Count; i++)
+        {
+            if (enemiesInRoom[i] == null)
+                enemiesInRoom.Remove(enemiesInRoom[i]);
+        }
     }
     /// <summary>
     /// Checks if the player is within the bounds of the zone.
@@ -76,25 +116,67 @@ public class CameraZone : MonoBehaviour
         else
             IsActive = false;
     }
+    public void SpawnAll(List<GameObject> _enemyList)
+    {
+        for (int i = 0; i < m_Enemies.Length; i++)
+        {
+            m_Enemies[i].Spawn(_enemyList);
+        }
+    }
+    public void DestroyAll(List<GameObject> _enemyList)
+    {
+        for (int i = 0; i < _enemyList.Count; i++)
+        {
+            if (_enemyList[i] == null) continue;
+
+            GameObject.Destroy(_enemyList[i]);
+        }
+    }
+
     private IEnumerator StartEvent()
     {
         Debug.Log("Event started");
 
         // Player moves to middle of the screen
-        StartCoroutine(MovePlayerToPos(new Vector2(transform.position.x, PlayerController.Instance.transform.position.y)));
-
-        yield return new WaitUntil(() => Mathf.Abs(PlayerController.Instance.transform.position.x - transform.position.x) <= 1f);
+        yield return MovePlayerToPos(new Vector2(transform.position.x, PlayerController.Instance.transform.position.y));
         // Close entrances
         CloseEntrance();
 
         // Start Wave 1 & wait untill all enemies of that wave spawned
         // Then spawn next Wave
         for (int i = 0; i < m_Waves.Length; i++)
+            yield return m_Waves[i].StartWave(enemiesInRoom, m_WavePositions);
+
+        // Wait until all enemies are dead
+        yield return new WaitUntil(() => enemiesInRoom.Count <= 0);
+        Debug.Log("All enemies dead");
+
+        // Open doors
+        OpenEntrance();
+
+        // Unlock Ability
+        switch (m_UnlockAbility)
         {
-            StartCoroutine(m_Waves[i].StartWave(enemiesInRoom, m_WavePositions));
-            yield return new WaitUntil(() => m_Waves[i].IsFinished); // Doesn't work
+            case EUnlockAbility.none:
+                break;
+            case EUnlockAbility.wallHang:
+                PlayerController.Instance.AllowWallHang = true;
+                break;
+            case EUnlockAbility.wallClimb:
+                PlayerController.Instance.AllowWallClimb = true;
+                break;
+            case EUnlockAbility.wallHop:
+                PlayerController.Instance.AllowWallHops = true;
+                break;
+            case EUnlockAbility.doubleJump:
+                PlayerController.Instance.AmountOfJumps = 2;
+                break;
+            case EUnlockAbility.dash:
+                PlayerController.Instance.AllowDashing = true;
+                break;
         }
 
+        // Play animation or particles
     }
 
     private IEnumerator MovePlayerToPos(Vector2 _pos)
@@ -129,13 +211,13 @@ public class CameraZone : MonoBehaviour
 
     private void CloseEntrance()
     {
-        for (int i = 0; i < EntranceBarriers.Length; i++)
-            EntranceBarriers[i].SetActive(true);
+        for (int i = 0; i < m_EntranceBarriers.Length; i++)
+            m_EntranceBarriers[i].SetActive(true);
     }
     private void OpenEntrance()
     {
-        for (int i = 0; i < EntranceBarriers.Length; i++)
-            EntranceBarriers[i].SetActive(false);
+        for (int i = 0; i < m_EntranceBarriers.Length; i++)
+            m_EntranceBarriers[i].SetActive(false);
     }
 
     private void OnDrawGizmos()
@@ -149,17 +231,17 @@ public class CameraZone : MonoBehaviour
         #endregion
 
         #region Spawnpoints
-        if (m_SpawnAbles.Enemies != null)
+        if (m_Enemies != null)
         {
-            for (int i = 0; i < m_SpawnAbles.Enemies.Length; i++)
+            for (int i = 0; i < m_Enemies.Length; i++)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawWireCube(m_SpawnAbles.Enemies[i].SpawnPoint, Vector2.one);
+                Gizmos.DrawWireCube((Vector2)m_Enemies[i].SpawnPoint, Vector2.one);
 
-                for (int k = 0; k < m_SpawnAbles.Enemies[i].Waypoints.Length; k++)
+                for (int k = 0; k < m_Enemies[i].Waypoints.Length; k++)
                 {
                     Gizmos.color = Color.red;
-                    Gizmos.DrawWireCube(m_SpawnAbles.Enemies[i].Waypoints[k], Vector2.one);
+                    Gizmos.DrawWireCube((Vector2)m_Enemies[i].Waypoints[k], Vector2.one);
                 }
             }
         }
@@ -168,7 +250,7 @@ public class CameraZone : MonoBehaviour
             for (int k = 0; k < m_WavePositions.Length; k++)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireCube(m_WavePositions[k], Vector2.one);
+                Gizmos.DrawWireCube((Vector2)m_WavePositions[k], Vector2.one);
             }
         }
         #endregion

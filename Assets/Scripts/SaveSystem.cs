@@ -86,6 +86,8 @@ public class SaveSystem : MonoBehaviour
 
     private SaveObject SaveAllDataToObject()
     {
+
+
         SaveObject data = new SaveObject()
         {
             PlayerPosition = PlayerController.Instance.transform.position,
@@ -98,6 +100,7 @@ public class SaveSystem : MonoBehaviour
             AllowJumping = PlayerController.Instance.AllowJumping,
             AllowMoving = PlayerController.Instance.AllowMoving,
             CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
+            CameraZones = GameManager.Instance.ZoneSaves,
         };
 
         return data;
@@ -114,6 +117,20 @@ public class SaveSystem : MonoBehaviour
         PlayerController.Instance.AllowJumping = _data.AllowJumping;
         PlayerController.Instance.AllowMoving = _data.AllowMoving;
         GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
+
+        CameraZone[] zones = FindObjectsOfType<CameraZone>();
+
+        for (int i = 0; i < zones.Length; i++)
+        {
+            for (int k = 0; k < _data.CameraZones.Count; k++)
+            {
+                if (zones[i].ID == _data.CameraZones[k].ZoneID)
+                    zones[i].WasVisited = _data.CameraZones[k].WasVisited;
+
+            }
+        }
+
+        GameManager.Instance.ZoneSaves = _data.CameraZones;
     }
 }
 public class SaveObject
@@ -129,4 +146,16 @@ public class SaveObject
     public bool AllowJumping;
     public bool AllowMoving;
     public List<Item> CollectedCollectibles;
+    public List<CameraZoneSaveData> CameraZones;
+}
+[System.Serializable]
+public struct CameraZoneSaveData
+{
+    public ushort ZoneID;
+    public bool WasVisited;
+    public CameraZoneSaveData(ushort _ID, bool _wasVisited)
+    {
+        ZoneID = _ID;
+        WasVisited = _wasVisited;
+    }
 }

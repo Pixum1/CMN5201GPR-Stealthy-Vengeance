@@ -75,6 +75,8 @@ public class CollisionCheck : MonoBehaviour
     /// <param name="_verticalVelocity">The vertical velocity of the player</param>
     public void CheckForCornerCorrection(float _verticalVelocity)
     {
+        if (!player.canJump) return;
+
         //Check for corner on the left
         RaycastHit2D hit = Physics2D.Raycast(transform.position - CCinnerRayOffset + Vector3.up * CCRayLength, Vector3.left, CCRayLength, groundLayer);
         if (hit.collider != null)

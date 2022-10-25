@@ -34,12 +34,18 @@ public class GameManager : MonoBehaviour
 
     private PlayerInput playerInput;
     public List<Item> CollectedCollectibles;
+    public List<CameraZoneSaveData> ZoneSaves;
 
     private void Awake()
     {
         Initialize();
 
         playerInput = GetComponent<PlayerInput>();
+    }
+
+    private void Start()
+    {
+
     }
 
 #if UNITY_EDITOR
