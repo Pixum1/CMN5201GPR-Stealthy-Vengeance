@@ -16,20 +16,20 @@ public class SamuraiAttackState : AIState
 
     public override void Enter()
     {
-        shootCooldownTimer = enemy.ShootCooldown;
+        shootCooldownTimer = data.ShootCooldown;
     }
     public override void Update()
     {
         shootCooldownTimer -= Time.deltaTime;
 
-        if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= enemy.AttackRange)
+        if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= data.AttackRange)
         {
             if (shootCooldownTimer <= 0)
             {
-                Projectile p = GameObject.Instantiate(enemy.ProjectilePrefab, controller.transform.position, Quaternion.identity);
-                p.Launch(PlayerController.Instance.transform.position - controller.transform.position, enemy.ShootForce, bulletLifeTime, "Enemy");
+                Projectile p = GameObject.Instantiate(data.ProjectilePrefab, controller.transform.position, Quaternion.identity);
+                p.Launch(PlayerController.Instance.transform.position - controller.transform.position, data.ShootForce, bulletLifeTime, "Enemy");
 
-                shootCooldownTimer = enemy.ShootCooldown;
+                shootCooldownTimer = data.ShootCooldown;
             }
         }
         else
@@ -37,7 +37,7 @@ public class SamuraiAttackState : AIState
             Vector2 destination = new Vector2(PlayerController.Instance.transform.position.x, controller.transform.position.y);
 
             controller.transform.position = Vector3.MoveTowards(controller.transform.position, destination,
-                   enemy.Speed * Time.deltaTime);
+                   data.Speed * Time.deltaTime);
         }
     }
     public override void Exit()

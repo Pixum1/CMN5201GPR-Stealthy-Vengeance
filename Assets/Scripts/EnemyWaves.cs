@@ -6,17 +6,18 @@ using UnityEngine;
 public struct EnemyWaves
 {
     public EnemyData[] EnemyTypes;
+    public Vector2Int[] SpawnPoints;
     public int AmountOfEnemies;
     public float TimeBetweenEnemySpawns;
 
-    public IEnumerator StartWave(List<GameObject> _enemyList, Vector2Int[] _locations)
+    public IEnumerator StartWave(List<GameObject> _enemyList)
     {
         for (int i = 0; i < AmountOfEnemies; i++)
         {
             int type = Random.Range(0, EnemyTypes.Length);
-            int location = Random.Range(0, _locations.Length);
+            int location = Random.Range(0, SpawnPoints.Length);
 
-            EnemyTypes[type].SpawnAt(_enemyList, _locations[location]);
+            EnemyTypes[type].SpawnAt(_enemyList, SpawnPoints[location]);
             yield return new WaitForSeconds(TimeBetweenEnemySpawns);
         }
         Debug.LogWarning("Wave is Finished");

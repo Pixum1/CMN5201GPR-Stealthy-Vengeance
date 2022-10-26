@@ -5,12 +5,11 @@ using UnityEngine;
 public abstract class AIState
 {
     protected AIController controller;
-    protected EnemyData enemy;
-
-    public AIState(AIController _controller, EnemyData _enemy)
+    protected EnemyData data;
+    public AIState(AIController _controller, EnemyData _enemyData)
     {
         this.controller = _controller;
-        this.enemy = _enemy;
+        this.data = _enemyData;
     }
     public abstract void Enter();
     public abstract void Update();

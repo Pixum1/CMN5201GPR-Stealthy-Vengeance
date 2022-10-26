@@ -66,7 +66,6 @@ public class CameraZone : MonoBehaviour
 
     [Header("Boss Room")]
     [SerializeField] private EnemyWaves[] m_Waves;
-    [SerializeField] private Vector2Int[] m_WavePositions;
     [SerializeField] private GameObject[] m_EntranceBarriers;
     private enum EUnlockAbility
     {
@@ -80,7 +79,12 @@ public class CameraZone : MonoBehaviour
     [SerializeField] private EUnlockAbility m_UnlockAbility;
 
     private List<GameObject> enemiesInRoom = new List<GameObject>();
+    [HideInInspector] public SpriteRenderer MapVisual;
 
+    private void OnValidate()
+    {
+        MapVisual.size = transform.localScale;
+    }
     private void Awake()
     {
         col = GetComponent<Collider>();
@@ -145,7 +149,7 @@ public class CameraZone : MonoBehaviour
         // Start Wave 1 & wait untill all enemies of that wave spawned
         // Then spawn next Wave
         for (int i = 0; i < m_Waves.Length; i++)
-            yield return m_Waves[i].StartWave(enemiesInRoom, m_WavePositions);
+            yield return m_Waves[i].StartWave(enemiesInRoom);
 
         // Wait until all enemies are dead
         yield return new WaitUntil(() => enemiesInRoom.Count <= 0);
@@ -245,12 +249,18 @@ public class CameraZone : MonoBehaviour
                 }
             }
         }
-        if (m_WavePositions != null)
+        if (m_Waves != null)
         {
-            for (int k = 0; k < m_WavePositions.Length; k++)
+            for (int i = 0; i < m_Waves.Length; i++)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireCube((Vector2)m_WavePositions[k], Vector2.one);
+                if (m_Waves[i].SpawnPoints != null)
+                {
+                    for (int k = 0; k < m_Waves[i].SpawnPoints.Length; k++)
+                    {
+                        Gizmos.DrawWireCube((Vector2)m_Waves[i].SpawnPoints[k], Vector2.one);
+                    }
+                }
             }
         }
         #endregion

@@ -31,11 +31,12 @@ public struct EnemyData
         e.transform.position = (Vector2)SpawnPoint;
         _enemyList.Add(e.gameObject);
     }
-    public void SpawnAt(List<GameObject> _enemyList, Vector2 _spawnPoint)
+    public void SpawnAt(List<GameObject> _enemyList, Vector2Int _spawnPoint)
     {
         AIController e = GameObject.Instantiate(EnemyPrefab);
         e.EnemyData = this;
-        e.transform.position = _spawnPoint;
+        e.EnemyData.SpawnPoint = _spawnPoint;
+        e.transform.position = (Vector2)_spawnPoint;
         _enemyList.Add(e.gameObject);
     }
     public void SpawnDrops(Vector2 _position)

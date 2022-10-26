@@ -29,7 +29,7 @@ public class SamuraiDeathState : AIState
     private void Die()
     {
         controller.SpriteRenderer.color = Color.red;
-        enemy.SpawnDrops(controller.transform.position);
+        data.SpawnDrops(controller.transform.position);
         GameObject.Destroy(controller.gameObject);
         Debug.LogWarning("Enemy Died!");
     }

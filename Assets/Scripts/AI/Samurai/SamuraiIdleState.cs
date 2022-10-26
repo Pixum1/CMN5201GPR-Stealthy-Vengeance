@@ -16,7 +16,7 @@ public class SamuraiIdleState : AIState
 
     public override void Enter()
     {
-        currTime = enemy.IdleTime;
+        currTime = data.IdleTime;
     }
     public override void Update()
     {

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public delegate bool StateMachineSwitchDelegate();
 
@@ -11,15 +12,16 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     protected Dictionary<AIState, Dictionary<StateMachineSwitchDelegate, AIState>> StateDictionary;
     protected bool CurrIdleState;
     protected AIState CurrentState;
-    protected bool SeesPlayer;
+    public bool SeesPlayer;
     private Vector2 prevMoveDir = Vector2.zero;
 
     // References
     public Health Health;
     public SpriteRenderer SpriteRenderer;
     [HideInInspector] public EnemyData EnemyData;
+    public AIPath Path;
 
-    public LayerMask layermask;
+    public LayerMask ObstacleLayer;
 
     private void Start()
     {
