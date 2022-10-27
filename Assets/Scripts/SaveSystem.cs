@@ -118,14 +118,12 @@ public class SaveSystem : MonoBehaviour
         PlayerController.Instance.AllowMoving = _data.AllowMoving;
         GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
 
-        CameraZone[] zones = FindObjectsOfType<CameraZone>();
-
-        for (int i = 0; i < zones.Length; i++)
+        for (int i = 0; i < ZoneManager.Instance.Zones.Length; i++)
         {
             for (int k = 0; k < _data.CameraZones.Count; k++)
             {
-                if (zones[i].ID == _data.CameraZones[k].ZoneID)
-                    zones[i].WasVisited = _data.CameraZones[k].WasVisited;
+                if (ZoneManager.Instance.Zones[i].ID == _data.CameraZones[k].ZoneID)
+                    ZoneManager.Instance.Zones[i].WasVisited = _data.CameraZones[k].WasVisited;
 
             }
         }

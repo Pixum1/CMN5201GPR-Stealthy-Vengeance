@@ -17,52 +17,43 @@ public class CameraZone : MonoBehaviour
 
             isActive = value;
 
-            // if this is the first time visiting this room
-            if (!WasVisited)
+            if (value == true)
             {
-                if (GameManager.Instance != null)
-                    for (int i = 0; i < GameManager.Instance.ZoneSaves.Count; i++)
-                    {
-                        // Find this zone in the GameManagers zone list
-                        if (GameManager.Instance.ZoneSaves[i].ZoneID != ID) continue;
+                ZoneManager.Instance.CurrentActiveZone = this;
+                // if this is the first time visiting this room
+                if (!WasVisited)
+                {
+                    if (GameManager.Instance != null)
+                        for (int i = 0; i < GameManager.Instance.ZoneSaves.Count; i++)
+                        {
+                            // Find this zone in the GameManagers zone list
+                            if (GameManager.Instance.ZoneSaves[i].ZoneID != ID) continue;
 
-                        // Create a new data object at the location in the list
-                        GameManager.Instance.ZoneSaves[i] = new CameraZoneSaveData(ID, true);
-                        Debug.Log("Set new Values for room " + ID);
-                    }
+                            // Create a new data object at the location in the list
+                            GameManager.Instance.ZoneSaves[i] = new CameraZoneSaveData(ID, true);
+                            Debug.Log("Set new Values for room " + ID);
+                        }
+                }
             }
 
-            switch (m_RoomType)
-            {
-                case ERoomType.normal:
-                    if (isActive)
-                        SpawnAll(enemiesInRoom);
-                    else
-                        DestroyAll(enemiesInRoom);
-                    break;
-                case ERoomType.boss:
-                    if (isActive && !WasVisited)
-                        StartCoroutine(StartEvent());
-                    break;
-            }
+            TriggerRoomAction();
 
             WasVisited = true;
         }
     }
 
-    [SerializeField] public LayerMask playerLayer;
     [HideInInspector] public Collider col;
     [SerializeField] public float cameraOrthographicSize = 11;
 
-    public enum ERoomType
+    private enum ERoomType
     {
         normal,
         boss,
     }
-    [SerializeField] public ERoomType m_RoomType;
+    [SerializeField] private ERoomType m_RoomType;
 
     [Header("Normal Room")]
-    [SerializeField] public EnemyData[] m_Enemies;
+    [SerializeField] private EnemyData[] m_Enemies;
 
     [Header("Boss Room")]
     [SerializeField] private EnemyWaves[] m_Waves;
@@ -81,18 +72,26 @@ public class CameraZone : MonoBehaviour
     private List<GameObject> enemiesInRoom = new List<GameObject>();
     [HideInInspector] public SpriteRenderer MapVisual;
 
-    private void OnValidate()
-    {
-        if (MapVisual != null)
-        {
-            MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
-            MapVisual.size = transform.localScale;
-        }
-    }
     private void Awake()
     {
         col = GetComponent<Collider>();
         CheckForPlayer();
+    }
+    private void TriggerRoomAction()
+    {
+        switch (m_RoomType)
+        {
+            case ERoomType.normal:
+                if (isActive)
+                    SpawnAll(enemiesInRoom);
+                else
+                    DestroyAll(enemiesInRoom);
+                break;
+            case ERoomType.boss:
+                if (isActive && !WasVisited)
+                    StartCoroutine(StartEvent());
+                break;
+        }
     }
 
     private void Start()
@@ -101,7 +100,7 @@ public class CameraZone : MonoBehaviour
         GameManager.Instance.ZoneSaves.Add(new CameraZoneSaveData(ID, WasVisited));
     }
 
-    private void Update()
+    public void UpdateRoom()
     {
         CheckForPlayer();
 
@@ -116,7 +115,10 @@ public class CameraZone : MonoBehaviour
     /// </summary>
     private void CheckForPlayer()
     {
-        Collider2D[] cols = Physics2D.OverlapBoxAll(transform.position, transform.localScale, 0f, playerLayer);
+        // dont check for the player if this is already the current zone
+        if (IsActive && ZoneManager.Instance.CurrentActiveZone == this) return;
+
+        Collider2D[] cols = Physics2D.OverlapBoxAll(transform.position, transform.localScale, 0f, ZoneManager.Instance.PlayerLayer);
 
         if (cols.Length != 0)
             IsActive = true;
@@ -124,14 +126,14 @@ public class CameraZone : MonoBehaviour
         else
             IsActive = false;
     }
-    public void SpawnAll(List<GameObject> _enemyList)
+    private void SpawnAll(List<GameObject> _enemyList)
     {
         for (int i = 0; i < m_Enemies.Length; i++)
         {
             m_Enemies[i].Spawn(_enemyList);
         }
     }
-    public void DestroyAll(List<GameObject> _enemyList)
+    private void DestroyAll(List<GameObject> _enemyList)
     {
         for (int i = 0; i < _enemyList.Count; i++)
         {
@@ -268,5 +270,13 @@ public class CameraZone : MonoBehaviour
             }
         }
         #endregion
+    }
+    private void OnValidate()
+    {
+        if (MapVisual != null)
+        {
+            MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
+            MapVisual.size = transform.localScale;
+        }
     }
 }

@@ -5,9 +5,8 @@ using System;
 
 public class CameraManager : MonoBehaviour
 {
-    private CameraZone currentZone; // the zone the player is currently in
+    private CameraZone currentZone;
     private CameraZone previousZone; // the zone the player was previously in
-    private CameraZone[] zones; // all zones in the scene
 
     [SerializeField] private float camSwitchSpeed; // The speed at which the camera moves over to the new zone
 
@@ -42,25 +41,20 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        zones = FindObjectsOfType<CameraZone>(); // get all zones
         cam = Camera.main;
 
-        GetCurrentZone();
-        //currentZone = zones[0];
+        currentZone = ZoneManager.Instance.CurrentActiveZone;
     }
 
     private void Start()
     {
-        GetCurrentZone();
+        currentZone = ZoneManager.Instance.CurrentActiveZone;
 
         rect = new Rect(0, 0, rectWidth, rectHeight);
     }
     private void Update()
     {
-        GetCurrentZone();
-        //if (previousZone == null) {
-        //    ResetCameraPos();
-        //}
+        currentZone = ZoneManager.Instance.CurrentActiveZone;
 
         if (currentZone != previousZone)
         {
@@ -69,7 +63,6 @@ public class CameraManager : MonoBehaviour
 
         if (!rect.Contains(objectToFollow.position) && Time.timeScale > 0f)
         {
-            //cam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, cam.transform.position.z);
             CameraMoveByRect();
             AdjustCamEdge(currentZone);
         }
@@ -140,7 +133,6 @@ public class CameraManager : MonoBehaviour
         {
             tempSize = sizeThreshold;
         }
-        //cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, tempSize, camSwitchSpeed/3 * 0.02f); //adjust cam size
         cam.orthographicSize = tempSize; // adjust cam size
     }
 
@@ -267,28 +259,20 @@ public class CameraManager : MonoBehaviour
         if (currentZone != null)
         {
             // if the player moves into the zone from its RIGHT side
-            if (objectToFollow.position.x > currentZone.col.bounds.center.x)
-            {
-                sideX = currentZone.col.bounds.max - new Vector3(cameraWidth / 2, 0, 0);
-            }
+            if (objectToFollow.position.x > currentZone.col.bounds.center.x) 
+                sideX = currentZone.col.bounds.max - new Vector3(cameraWidth / 2, 0, 0); 
 
             // if the player moves into the zone from its LEFT side
-            else if (objectToFollow.position.x < currentZone.col.bounds.center.x)
-            {
-                sideX = currentZone.col.bounds.min + new Vector3(cameraWidth / 2, 0, 0);
-            }
+            else if (objectToFollow.position.x < currentZone.col.bounds.center.x) 
+                sideX = currentZone.col.bounds.min + new Vector3(cameraWidth / 2, 0, 0); 
 
             // if the player moves into the LOWER PART OF THE ZONE
-            if (distanceToBottom < currentZone.col.bounds.min.y)
-            {
-                sideY = currentZone.col.bounds.min + new Vector3(0, cameraHeight / 2, 0);
-            }
+            if (distanceToBottom < currentZone.col.bounds.min.y) 
+                sideY = currentZone.col.bounds.min + new Vector3(0, cameraHeight / 2, 0); 
 
             // if the player moves into the UPPER PART OF THE ZONE
-            else if (distanceToTop > currentZone.col.bounds.max.y)
-            {
-                sideY = currentZone.col.bounds.max - new Vector3(0, cameraHeight / 2, 0);
-            }
+            else if (distanceToTop > currentZone.col.bounds.max.y) 
+                sideY = currentZone.col.bounds.max - new Vector3(0, cameraHeight / 2, 0); 
         }
 
 
@@ -300,24 +284,9 @@ public class CameraManager : MonoBehaviour
     {
         currentZone = null;
         previousZone = null;
-        GetCurrentZone();
+        currentZone = ZoneManager.Instance.CurrentActiveZone;
         cam.transform.position = new Vector3(objectToFollow.position.x, objectToFollow.position.y, cam.transform.position.z);
         AdjustCamEdge(currentZone);
-        //cam.transform.position = CalculateNewPosition();
-    }
-
-    /// <summary>
-    /// Get the zone the player is currently standing in.
-    /// </summary>
-    private void GetCurrentZone()
-    {
-        foreach (CameraZone zone in zones)
-        {
-            if (zone.IsActive)
-            {
-                currentZone = zone;
-            }
-        }
     }
 
     private void OnDrawGizmos()

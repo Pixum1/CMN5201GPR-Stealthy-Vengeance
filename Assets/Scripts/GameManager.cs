@@ -32,18 +32,15 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    private PlayerInput playerInput;
+    public PlayerInput PlayerInput;
     public List<Item> CollectedCollectibles;
     public List<CameraZoneSaveData> ZoneSaves;
-    public CameraZone[] Zones;
 
     private void Awake()
     {
         Initialize();
 
-        playerInput = GetComponent<PlayerInput>();
-
-        Zones = FindObjectsOfType<CameraZone>();
+        PlayerInput = GetComponent<PlayerInput>();
     }
 
     private void Start()
@@ -54,7 +51,7 @@ public class GameManager : MonoBehaviour
 #if UNITY_EDITOR
     private void OnEnable()
     {
-        playerInput.actions.FindActionMap("Debug").Enable();
+        PlayerInput.actions.FindActionMap("Debug").Enable();
     }
 #else
     private void OnEnable()

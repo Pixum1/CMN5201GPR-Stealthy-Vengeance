@@ -831,9 +831,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 1
@@ -47367,6 +47364,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6450547054204513145, guid: aa2f0731d75f2574b9224d8e577d52c4, type: 3}
+      propertyPath: PlayerLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 6450547054204513145, guid: aa2f0731d75f2574b9224d8e577d52c4, type: 3}
       propertyPath: playerLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -47750,9 +47751,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 6
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0
@@ -47822,9 +47820,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0
@@ -48357,9 +48352,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0
@@ -48461,9 +48453,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0
@@ -49615,9 +49604,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 5
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0
@@ -64326,9 +64312,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4
   WasVisited: 0
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
   col: {fileID: 0}
   cameraOrthographicSize: 9
   m_RoomType: 0

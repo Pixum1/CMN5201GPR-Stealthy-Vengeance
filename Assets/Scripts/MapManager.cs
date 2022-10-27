@@ -9,7 +9,6 @@ using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInput m_Input;
     [SerializeField] private Color m_VisitedColor;
     [SerializeField] private Color m_NormalColor;
     [SerializeField] private Color m_CurrentZoneColor;
@@ -101,13 +100,9 @@ public class MapManager : MonoBehaviour
         m_MaxiMapImage.gameObject.SetActive(true);
         maximapOpenFlag = true;
         // Enable MaxiMap InputSystem controls
-        m_Input.currentActionMap = m_Input.actions.FindActionMap("MaxiMap");
+        GameManager.Instance.PlayerInput.currentActionMap = GameManager.Instance.PlayerInput.actions.FindActionMap("MaxiMap");
         // Set MaxiMap position to current zone
-        for (int i = 0; i < GameManager.Instance.Zones.Length; i++)
-        {
-            if (GameManager.Instance.Zones[i].IsActive)
-                cam.transform.position = GameManager.Instance.Zones[i].transform.position;
-        }
+        cam.transform.position = ZoneManager.Instance.CurrentActiveZone.transform.position;
         // set normal maximap size
         cam.orthographicSize = m_NormalMaxiMapSize;
     }
@@ -147,39 +142,37 @@ public class MapManager : MonoBehaviour
         m_MaxiMapImage.gameObject.SetActive(false);
         maximapOpenFlag = false;
         // Enable Player Movement
-        m_Input.currentActionMap = m_Input.actions.FindActionMap("Player");
+        GameManager.Instance.PlayerInput.currentActionMap = GameManager.Instance.PlayerInput.actions.FindActionMap("Player");
         // Reset Map Coords
         cam.transform.position = new Vector3(0, 0, -10);
     }
 
     private void UpdateZones()
     {
-        for (int i = 0; i < GameManager.Instance.Zones.Length; i++)
+        for (int i = 0; i < ZoneManager.Instance.Zones.Length; i++)
         {
-            if (GameManager.Instance.Zones[i].WasVisited)
-                GameManager.Instance.Zones[i].MapVisual.color = new Color(m_VisitedColor.r, m_VisitedColor.g, m_VisitedColor.b, m_Transparency);
+            if (ZoneManager.Instance.Zones[i].WasVisited)
+                ZoneManager.Instance.Zones[i].MapVisual.color = new Color(m_VisitedColor.r, m_VisitedColor.g, m_VisitedColor.b, m_Transparency);
             else
-                GameManager.Instance.Zones[i].MapVisual.color = new Color(m_NormalColor.r, m_NormalColor.g, m_NormalColor.b, m_Transparency);
-
-            if (GameManager.Instance.Zones[i].IsActive)
-                GameManager.Instance.Zones[i].MapVisual.color = new Color(m_CurrentZoneColor.r, m_CurrentZoneColor.g, m_CurrentZoneColor.b, m_Transparency);
+                ZoneManager.Instance.Zones[i].MapVisual.color = new Color(m_NormalColor.r, m_NormalColor.g, m_NormalColor.b, m_Transparency);
         }
+        ZoneManager.Instance.CurrentActiveZone.MapVisual.color = new Color(m_CurrentZoneColor.r, m_CurrentZoneColor.g, m_CurrentZoneColor.b, m_Transparency);
     }
     private void CalculateBounds()
     {
-        for (int i = 0; i < GameManager.Instance.Zones.Length; i++)
+        for (int i = 0; i < ZoneManager.Instance.Zones.Length; i++)
         {
-            if (mapBoundsMin.x > GameManager.Instance.Zones[i].transform.position.x)
-                mapBoundsMin.x = GameManager.Instance.Zones[i].transform.position.x;
+            if (mapBoundsMin.x > ZoneManager.Instance.Zones[i].transform.position.x)
+                mapBoundsMin.x = ZoneManager.Instance.Zones[i].transform.position.x;
 
-            if (mapBoundsMin.y > GameManager.Instance.Zones[i].transform.position.y)
-                mapBoundsMin.y = GameManager.Instance.Zones[i].transform.position.y;
+            if (mapBoundsMin.y > ZoneManager.Instance.Zones[i].transform.position.y)
+                mapBoundsMin.y = ZoneManager.Instance.Zones[i].transform.position.y;
 
-            if (mapBoundsMax.x < GameManager.Instance.Zones[i].transform.position.x)
-                mapBoundsMax.x = GameManager.Instance.Zones[i].transform.position.x;
+            if (mapBoundsMax.x < ZoneManager.Instance.Zones[i].transform.position.x)
+                mapBoundsMax.x = ZoneManager.Instance.Zones[i].transform.position.x;
 
-            if (mapBoundsMax.y < GameManager.Instance.Zones[i].transform.position.y)
-                mapBoundsMax.y = GameManager.Instance.Zones[i].transform.position.y;
+            if (mapBoundsMax.y < ZoneManager.Instance.Zones[i].transform.position.y)
+                mapBoundsMax.y = ZoneManager.Instance.Zones[i].transform.position.y;
         }
     }
 }

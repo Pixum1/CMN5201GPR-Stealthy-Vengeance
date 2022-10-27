@@ -4,10 +4,52 @@ using UnityEngine;
 
 public class ZoneManager : MonoBehaviour
 {
-    [SerializeField] public LayerMask playerLayer;
-    [SerializeField] private Vector2 standardSize = new Vector2(40,22);
-    [SerializeField] private GameObject m_MapVisuals;
+    #region Singleton
+    private static ZoneManager instance;
+    public static ZoneManager Instance { get { return instance; } }
 
+    private void Initialize()
+    {
+        if (instance != null && instance != this)
+            Destroy(this);
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
+    private void Terminate()
+    {
+        if (this == Instance)
+            instance = null;
+    }
+    #endregion
+
+    [SerializeField] public LayerMask PlayerLayer;
+    [SerializeField] private Vector2 standardSize = new Vector2(40, 22);
+    [SerializeField] private GameObject m_MapVisuals;
+    public CameraZone[] Zones;
+    public CameraZone CurrentActiveZone;
+
+    private void Awake()
+    {
+        Initialize();
+    }
+
+    private void Start()
+    {
+        Zones = FindObjectsOfType<CameraZone>();
+    }
+    private void Update()
+    {
+        for (int i = 0; i < Zones.Length; i++)
+        {
+            Zones[i].UpdateRoom();
+            //prevent the bug where the player can stand in two rooms at once
+            if (Zones[i].IsActive && CurrentActiveZone != Zones[i])
+                CurrentActiveZone = Zones[i];
+        }
+    }
     /// <summary>
     /// Creates a new CameraZone and returns it.
     /// </summary>
@@ -33,7 +75,6 @@ public class ZoneManager : MonoBehaviour
         zone.transform.localScale = standardSize;
         zone.AddComponent<BoxCollider>().isTrigger = true;
         CameraZone z = zone.AddComponent<CameraZone>();
-        z.playerLayer = playerLayer;
         z.ID = id;
 
         // Create visuals for the minimap
@@ -45,5 +86,10 @@ public class ZoneManager : MonoBehaviour
         z.MapVisual.size = zone.transform.localScale;
 
         return zone;
+    }
+
+    private void OnDestroy()
+    {
+        Terminate();
     }
 }
