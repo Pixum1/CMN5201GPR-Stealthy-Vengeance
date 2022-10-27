@@ -36,8 +36,14 @@ public class SamuraiAttackState : AIState
         {
             Vector2 destination = new Vector2(PlayerController.Instance.transform.position.x, controller.transform.position.y);
 
-            controller.transform.position = Vector3.MoveTowards(controller.transform.position, destination,
-                   data.Speed * Time.deltaTime);
+            Vector2 rightPoint = new Vector3(controller.transform.position.x + 2, controller.transform.position.y - controller.transform.localScale.y / 2);
+            Vector2 leftPoint = new Vector3(controller.transform.position.x - 2, controller.transform.position.y - controller.transform.localScale.y / 2);
+
+            Collider2D[] rightCol = Physics2D.OverlapBoxAll(rightPoint, Vector2.one, 0f, LayerMask.GetMask("Obstacle"));
+            Collider2D[] leftCol = Physics2D.OverlapBoxAll(leftPoint, Vector2.one, 0f, LayerMask.GetMask("Obstacle"));
+
+            if (leftCol.Length > 0 && rightCol.Length > 0)
+                controller.transform.position = Vector3.MoveTowards(controller.transform.position, destination, data.Speed * Time.deltaTime);
         }
     }
     public override void Exit()

@@ -35,12 +35,15 @@ public class GameManager : MonoBehaviour
     private PlayerInput playerInput;
     public List<Item> CollectedCollectibles;
     public List<CameraZoneSaveData> ZoneSaves;
+    public CameraZone[] Zones;
 
     private void Awake()
     {
         Initialize();
 
         playerInput = GetComponent<PlayerInput>();
+
+        Zones = FindObjectsOfType<CameraZone>();
     }
 
     private void Start()

@@ -83,7 +83,11 @@ public class CameraZone : MonoBehaviour
 
     private void OnValidate()
     {
-        MapVisual.size = transform.localScale;
+        if (MapVisual != null)
+        {
+            MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
+            MapVisual.size = transform.localScale;
+        }
     }
     private void Awake()
     {

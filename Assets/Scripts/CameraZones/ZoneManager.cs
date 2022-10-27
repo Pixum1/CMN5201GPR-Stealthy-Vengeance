@@ -21,7 +21,10 @@ public class ZoneManager : MonoBehaviour
         for (int i = 0; i < zones.Length; i++)
         {
             if (id <= zones[i].ID)
-                id = zones[i].ID++;
+            {
+                id = zones[i].ID;
+                id++;
+            }
         }
 
         // Create a new zone
@@ -31,7 +34,7 @@ public class ZoneManager : MonoBehaviour
         zone.AddComponent<BoxCollider>().isTrigger = true;
         CameraZone z = zone.AddComponent<CameraZone>();
         z.playerLayer = playerLayer;
-        z.ID = _id;
+        z.ID = id;
 
         // Create visuals for the minimap
         GameObject visual = Instantiate(m_MapVisuals);
