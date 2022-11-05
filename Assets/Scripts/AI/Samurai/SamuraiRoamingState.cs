@@ -35,7 +35,7 @@ public class SamuraiRoamingState : AIState
             switchIdleState.Invoke();
         else
             controller.transform.position = Vector3.MoveTowards(controller.transform.position, targetDestination,
-                data.Speed * Time.deltaTime);
+                controller.Speed * Time.deltaTime);
 
         if (roamTimer <= 0)
             switchIdleState.Invoke();

@@ -14,6 +14,10 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     protected AIState CurrentState;
     public bool SeesPlayer;
     private Vector2 prevMoveDir = Vector2.zero;
+    public float IdleTime;
+    public float Speed;
+    public float AttackRange;
+    public float VisionRange;
 
     // References
     public Health Health;
@@ -25,7 +29,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
 
     private void Start()
     {
-        Health.SetHP(EnemyData.HP);
+        Health.SetHP(Health.MaxHP);
         InitializeFSM();
     }
     private void Update()
@@ -60,7 +64,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     {
         float range = (transform.position - PlayerController.Instance.transform.position).sqrMagnitude;
 
-        if (range <= Mathf.Pow(EnemyData.VisionRange, 2))
+        if (range <= Mathf.Pow(VisionRange, 2))
         {
             Ray2D ray = new Ray2D(transform.position, PlayerController.Instance.transform.position - transform.position);
 

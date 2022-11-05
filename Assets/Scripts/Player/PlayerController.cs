@@ -93,7 +93,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
     public Health Health;
-    [SerializeField] private int m_MaxHP;
     private Camera mainCam;
     private Mouse mouse;
 
@@ -135,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Health.SetHP(m_MaxHP);
+        Health.SetHP(Health.MaxHP);
 
         mouse = Mouse.current;
         mainCam = Camera.main;
@@ -327,6 +326,8 @@ public class PlayerController : MonoBehaviour
 
         jumpForce = Mathf.Sqrt(_jumpHeight * -2f * (Physics.gravity.y * RigidBody.gravityScale));
         RigidBody.AddForce(_dir * jumpForce, ForceMode2D.Impulse);
+
+        //CameraManager.Instance.Shake(.05f, .05f);
     }
 
     private void Dash(float _x, float _y, bool directionBased = false)

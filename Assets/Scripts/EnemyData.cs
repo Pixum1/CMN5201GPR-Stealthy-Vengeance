@@ -8,19 +8,10 @@ public struct EnemyData
 
     public Vector2Int SpawnPoint;
 
-    public int HP;
-
-    public float IdleTime;
-    public float Speed;
     public Vector2Int[] Waypoints;
 
     [Header("Combat")]
     public Projectile ProjectilePrefab;
-    public float ShootForce;
-    public float ShootCooldown;
-    public float AttackRange;
-
-    public float VisionRange;
 
     public Drops[] Drops;
 

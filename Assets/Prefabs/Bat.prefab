@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9e7c4d8220da443b551a77378d5989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MaxHP: 2
 --- !u!50 &7262624197494182397
 Rigidbody2D:
   serializedVersion: 4
@@ -110,20 +111,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SeesPlayer: 0
+  IdleTime: 1
+  Speed: 10
+  AttackRange: 0
+  VisionRange: 10
   Health: {fileID: 7262624197494182398}
   SpriteRenderer: {fileID: 7262624198383323700}
   EnemyData:
     EnemyPrefab: {fileID: 0}
     SpawnPoint: {x: 0, y: 0}
-    HP: 0
-    IdleTime: 0
-    Speed: 0
     Waypoints: []
     ProjectilePrefab: {fileID: 0}
-    ShootForce: 0
-    ShootCooldown: 0
-    AttackRange: 0
-    VisionRange: 0
     Drops: []
   Path: {fileID: -1192516302969050330}
   ObstacleLayer:

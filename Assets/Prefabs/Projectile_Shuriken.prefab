@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Rb: {fileID: 6970141249066623765}
   m_Damage: 1
   m_SpriteRenderer: {fileID: 4493311988437260406}
+  shootForce: 30
+  Cooldown: 0.25
 --- !u!58 &2112695659873490070
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -75,7 +75,6 @@ public class CameraZone : MonoBehaviour
     private void Awake()
     {
         col = GetComponent<Collider>();
-        CheckForPlayer();
     }
     private void TriggerRoomAction()
     {
@@ -89,7 +88,9 @@ public class CameraZone : MonoBehaviour
                 break;
             case ERoomType.boss:
                 if (isActive && !WasVisited)
+                {
                     StartCoroutine(StartEvent());
+                }
                 break;
         }
     }
@@ -146,6 +147,7 @@ public class CameraZone : MonoBehaviour
     private IEnumerator StartEvent()
     {
         Debug.Log("Event started");
+        ZoneManager.Instance.StartEncounterEvent.RaiseEvent();
 
         // Player moves to middle of the screen
         yield return MovePlayerToPos(new Vector2(transform.position.x, PlayerController.Instance.transform.position.y));
@@ -185,8 +187,8 @@ public class CameraZone : MonoBehaviour
                 PlayerController.Instance.AllowDashing = true;
                 break;
         }
-
         // Play animation or particles
+        ZoneManager.Instance.EndEncounterEvent.RaiseEvent();
     }
 
     private IEnumerator MovePlayerToPos(Vector2 _pos)

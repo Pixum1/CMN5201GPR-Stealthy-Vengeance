@@ -30,6 +30,8 @@ public class ZoneManager : MonoBehaviour
     [SerializeField] private GameObject m_MapVisuals;
     public CameraZone[] Zones;
     public CameraZone CurrentActiveZone;
+    public ScriptableEvent StartEncounterEvent;
+    public ScriptableEvent EndEncounterEvent;
 
     private void Awake()
     {

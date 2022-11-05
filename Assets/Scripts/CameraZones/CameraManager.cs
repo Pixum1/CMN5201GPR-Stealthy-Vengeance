@@ -5,6 +5,32 @@ using System;
 
 public class CameraManager : MonoBehaviour
 {
+    #region Singleton
+    private static CameraManager instance;
+    public static CameraManager Instance { get { return instance; } }
+
+    private void Initialize()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
+
+    private void Terminate()
+    {
+        if (this == Instance)
+        {
+            instance = null;
+        }
+    }
+    #endregion
+
     private CameraZone currentZone;
     private CameraZone previousZone; // the zone the player was previously in
 
@@ -41,6 +67,8 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
+        Initialize();
+
         cam = Camera.main;
 
         currentZone = ZoneManager.Instance.CurrentActiveZone;
@@ -259,20 +287,20 @@ public class CameraManager : MonoBehaviour
         if (currentZone != null)
         {
             // if the player moves into the zone from its RIGHT side
-            if (objectToFollow.position.x > currentZone.col.bounds.center.x) 
-                sideX = currentZone.col.bounds.max - new Vector3(cameraWidth / 2, 0, 0); 
+            if (objectToFollow.position.x > currentZone.col.bounds.center.x)
+                sideX = currentZone.col.bounds.max - new Vector3(cameraWidth / 2, 0, 0);
 
             // if the player moves into the zone from its LEFT side
-            else if (objectToFollow.position.x < currentZone.col.bounds.center.x) 
-                sideX = currentZone.col.bounds.min + new Vector3(cameraWidth / 2, 0, 0); 
+            else if (objectToFollow.position.x < currentZone.col.bounds.center.x)
+                sideX = currentZone.col.bounds.min + new Vector3(cameraWidth / 2, 0, 0);
 
             // if the player moves into the LOWER PART OF THE ZONE
-            if (distanceToBottom < currentZone.col.bounds.min.y) 
-                sideY = currentZone.col.bounds.min + new Vector3(0, cameraHeight / 2, 0); 
+            if (distanceToBottom < currentZone.col.bounds.min.y)
+                sideY = currentZone.col.bounds.min + new Vector3(0, cameraHeight / 2, 0);
 
             // if the player moves into the UPPER PART OF THE ZONE
-            else if (distanceToTop > currentZone.col.bounds.max.y) 
-                sideY = currentZone.col.bounds.max - new Vector3(0, cameraHeight / 2, 0); 
+            else if (distanceToTop > currentZone.col.bounds.max.y)
+                sideY = currentZone.col.bounds.max - new Vector3(0, cameraHeight / 2, 0);
         }
 
 
@@ -287,6 +315,48 @@ public class CameraManager : MonoBehaviour
         currentZone = ZoneManager.Instance.CurrentActiveZone;
         cam.transform.position = new Vector3(objectToFollow.position.x, objectToFollow.position.y, cam.transform.position.z);
         AdjustCamEdge(currentZone);
+    }
+
+    /// <summary>
+    /// Shakes the camera.
+    /// </summary>
+    /// <param name="_originalPos">Original position of the camera</param>
+    /// <param name="_dir">Vector2.one if no specific direction</param>
+    /// <param name="_duration">Amount of seconds the camera should shake. Default = 0.05</param>
+    /// <param name="_intensity">the intensity of the camera shake. Default = 0.05</param>
+    public void Shake(float _duration = .05f, float _intensity = .05f)
+    {
+        StartCoroutine(COShake(_duration, _intensity));
+    }
+    private IEnumerator COShake(float _duration = .05f, float _intensity = .05f)
+    {
+        float timer = 0f;
+        Vector3 originalPos = cam.transform.position;
+        Vector2 newPos;
+        Vector2 randomValue;
+
+        while (timer < _duration)
+        {
+            randomValue = UnityEngine.Random.insideUnitCircle.normalized;
+            newPos = new Vector2(randomValue.x * _intensity, randomValue.y * _intensity);
+
+            Camera.main.transform.localPosition += (Vector3)newPos;
+
+            timer += Time.deltaTime;
+
+            // adjust original position if the player moves outside the rect
+            if (!rect.Contains(objectToFollow.position) && Time.timeScale > 0f)
+                originalPos = cam.transform.localPosition;
+
+            yield return null;
+        }
+
+        Camera.main.transform.localPosition = originalPos;
+    }
+
+    private void OnDestroy()
+    {
+        Terminate();
     }
 
     private void OnDrawGizmos()

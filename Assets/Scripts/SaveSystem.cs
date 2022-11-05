@@ -86,8 +86,6 @@ public class SaveSystem : MonoBehaviour
 
     private SaveObject SaveAllDataToObject()
     {
-
-
         SaveObject data = new SaveObject()
         {
             PlayerPosition = PlayerController.Instance.transform.position,

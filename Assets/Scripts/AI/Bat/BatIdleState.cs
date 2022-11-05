@@ -11,7 +11,7 @@ public class BatIdleState : AIState
     }
     public override void Enter()
     {
-        controller.Path.maxSpeed = data.Speed;
+        controller.Path.maxSpeed = controller.Speed;
         controller.Path.destination = (Vector2)data.SpawnPoint;
     }
 

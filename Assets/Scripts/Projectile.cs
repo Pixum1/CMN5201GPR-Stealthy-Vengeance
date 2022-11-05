@@ -7,12 +7,15 @@ public class Projectile : MonoBehaviour
     [SerializeField] private Rigidbody2D m_Rb;
     [SerializeField] private int m_Damage;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
+    [SerializeField] private float shootForce;
     private string ignoredTag;
-    public void Launch(Vector2 _dir, float _force, float _duration, string _ignoreTag)
+    public float Cooldown;
+
+    public void Launch(Vector2 _dir, float _duration, string _ignoreTag)
     {
         ignoredTag = _ignoreTag;
         _dir.Normalize();
-        m_Rb.velocity = _dir * _force;
+        m_Rb.velocity = _dir * shootForce;
         m_SpriteRenderer.transform.right = m_Rb.velocity;  
         Invoke("DeleteProjectile", _duration);
     }

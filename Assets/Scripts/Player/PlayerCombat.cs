@@ -11,8 +11,6 @@ public class PlayerCombat : MonoBehaviour
     private float timer;
 
     [SerializeField] private Projectile m_Projectile;
-    [SerializeField] private float m_Force;
-    [SerializeField] private float m_Cooldown;
     [SerializeField] private float m_ProjectileRegenerationTime;
     [SerializeField] private float m_BulletLifeTime;
     [SerializeField] private SpriteRenderer[] m_FloatingProjectiles;
@@ -47,9 +45,9 @@ public class PlayerCombat : MonoBehaviour
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));
 
                     Projectile p = Instantiate(m_Projectile, pos, Quaternion.identity);
-                    p.Launch(dir, m_Force, m_BulletLifeTime, "Player");
+                    p.Launch(dir, m_BulletLifeTime, "Player");
 
-                    timer = m_Cooldown;
+                    timer = m_Projectile.Cooldown;
                     break;
                 }
             }
@@ -66,9 +64,9 @@ public class PlayerCombat : MonoBehaviour
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));
 
                     Projectile p = Instantiate(m_Projectile, pos, Quaternion.identity);
-                    p.Launch(dir, m_Force, m_BulletLifeTime, "Player");
+                    p.Launch(dir, m_BulletLifeTime, "Player");
 
-                    timer = m_Cooldown;
+                    timer = m_Projectile.Cooldown;
                     break;
                 }
             }
