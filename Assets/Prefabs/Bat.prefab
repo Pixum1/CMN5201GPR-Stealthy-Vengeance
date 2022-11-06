@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9e7c4d8220da443b551a77378d5989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MaxHP: 2
+  m_MaxHP: 1
 --- !u!50 &7262624197494182397
 Rigidbody2D:
   serializedVersion: 4
@@ -121,9 +121,9 @@ MonoBehaviour:
     EnemyPrefab: {fileID: 0}
     SpawnPoint: {x: 0, y: 0}
     Waypoints: []
-    ProjectilePrefab: {fileID: 0}
-    Drops: []
   Path: {fileID: -1192516302969050330}
+  ProjectilePrefab: {fileID: 0}
+  Drops: []
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 8

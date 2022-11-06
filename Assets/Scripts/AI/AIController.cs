@@ -24,6 +24,9 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     public SpriteRenderer SpriteRenderer;
     [HideInInspector] public EnemyData EnemyData;
     public AIPath Path;
+    public Projectile ProjectilePrefab;
+
+    public Drops[] Drops;
 
     public LayerMask ObstacleLayer;
 
@@ -48,7 +51,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
         {
             if (transition.Key())
             {
-                Debug.Log($"Switched from {CurrentState} to {transition.Value}!");
+                //Debug.Log($"Switched from {CurrentState} to {transition.Value}!");
 
                 CurrentState.Exit();
                 transition.Value.Enter();

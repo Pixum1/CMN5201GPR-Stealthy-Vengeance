@@ -39,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
                 {
                     if (!m_FloatingProjectiles[i].enabled) continue;
 
-                    Vector3 pos = m_FloatingProjectiles[i].transform.position;
+                    Vector3 pos = new Vector3(transform.position.x - .5f, transform.position.y);
                     Vector3 dir = mousePos - pos;
 
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));
@@ -58,7 +58,7 @@ public class PlayerCombat : MonoBehaviour
                 {
                     if (!m_FloatingProjectiles[i].enabled) continue;
 
-                    Vector3 pos = m_FloatingProjectiles[i].transform.position;
+                    Vector3 pos = new Vector3(transform.position.x + .5f, transform.position.y);
                     Vector3 dir = mousePos - pos;
 
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));

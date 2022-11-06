@@ -10,11 +10,6 @@ public struct EnemyData
 
     public Vector2Int[] Waypoints;
 
-    [Header("Combat")]
-    public Projectile ProjectilePrefab;
-
-    public Drops[] Drops;
-
     public void Spawn(List<GameObject> _enemyList)
     {
         AIController e = GameObject.Instantiate(EnemyPrefab);
@@ -32,8 +27,8 @@ public struct EnemyData
     }
     public void SpawnDrops(Vector2 _position)
     {
-        for (int i = 0; i < Drops.Length; i++)
-            Drops[i].Drop(_position);
+        for (int i = 0; i < EnemyPrefab.Drops.Length; i++)
+            EnemyPrefab.Drops[i].Drop(_position);
     }
 }
 [System.Serializable]

@@ -16,7 +16,7 @@ public class SamuraiAttackState : AIState
 
     public override void Enter()
     {
-        shootCooldownTimer = controller.EnemyData.ProjectilePrefab.Cooldown;
+        shootCooldownTimer = controller.ProjectilePrefab.Cooldown;
     }
     public override void Update()
     {
@@ -26,10 +26,10 @@ public class SamuraiAttackState : AIState
         {
             if (shootCooldownTimer <= 0)
             {
-                Projectile p = GameObject.Instantiate(data.ProjectilePrefab, controller.transform.position, Quaternion.identity);
+                Projectile p = GameObject.Instantiate(controller.ProjectilePrefab, controller.transform.position, Quaternion.identity);
                 p.Launch(PlayerController.Instance.transform.position - controller.transform.position, bulletLifeTime, "Enemy");
 
-                shootCooldownTimer = controller.EnemyData.ProjectilePrefab.Cooldown;
+                shootCooldownTimer = controller.ProjectilePrefab.Cooldown;
             }
         }
         else

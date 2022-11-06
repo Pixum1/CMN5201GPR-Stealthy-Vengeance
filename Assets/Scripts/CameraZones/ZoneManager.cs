@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,7 @@ public class ZoneManager : MonoBehaviour
     public CameraZone CurrentActiveZone;
     public ScriptableEvent StartEncounterEvent;
     public ScriptableEvent EndEncounterEvent;
+    public Action E_ChangedZone;
 
     private void Awake()
     {
@@ -49,7 +51,10 @@ public class ZoneManager : MonoBehaviour
             Zones[i].UpdateRoom();
             //prevent the bug where the player can stand in two rooms at once
             if (Zones[i].IsActive && CurrentActiveZone != Zones[i])
+            {
                 CurrentActiveZone = Zones[i];
+                E_ChangedZone.Invoke();
+            }
         }
     }
     /// <summary>

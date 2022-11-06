@@ -119,12 +119,16 @@ MonoBehaviour:
     EnemyPrefab: {fileID: 2271130227691108440}
     SpawnPoint: {x: 0, y: 0}
     Waypoints: []
-    ProjectilePrefab: {fileID: 1827334929654878298, guid: 8baf2c1441f84504394e02a4b0ad9a6d, type: 3}
-    Drops: []
   Path: {fileID: 0}
+  ProjectilePrefab: {fileID: 1827334929654878298, guid: 4dcaf0c1758403648b106a5deb4829ab, type: 3}
+  Drops:
+  - Item: {fileID: 1291248816338897808, guid: 875aa9494c9959d4d92cd6d456648ceb, type: 3}
+    DropChance: 0.25
+    Despawn: 1
+    DespawnTime: 10
   ObstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!1 &7262624198383323702
 GameObject:
   m_ObjectHideFlags: 0

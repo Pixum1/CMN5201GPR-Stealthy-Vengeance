@@ -13,6 +13,11 @@ public class Health : MonoBehaviour
 
     public Action E_TriggerDeath;
 
+    private void Awake()
+    {
+        SetHP(MaxHP);
+    }
+
     public void SetHP(int _maxHP)
     {
         m_MaxHP = _maxHP;

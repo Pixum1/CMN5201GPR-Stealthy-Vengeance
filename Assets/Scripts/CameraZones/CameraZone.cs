@@ -31,7 +31,7 @@ public class CameraZone : MonoBehaviour
 
                             // Create a new data object at the location in the list
                             GameManager.Instance.ZoneSaves[i] = new CameraZoneSaveData(ID, true);
-                            Debug.Log("Set new Values for room " + ID);
+                            //Debug.Log("Set new Values for room " + ID);
                         }
                 }
             }
@@ -273,12 +273,12 @@ public class CameraZone : MonoBehaviour
         }
         #endregion
     }
-    private void OnValidate()
-    {
-        if (MapVisual != null)
-        {
-            MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
-            MapVisual.size = transform.localScale;
-        }
-    }
+    //private void OnValidate()
+    //{
+    //    if (MapVisual != null)
+    //    {
+    //        MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
+    //        MapVisual.size = transform.localScale;
+    //    }
+    //}
 }

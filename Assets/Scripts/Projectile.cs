@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
         ignoredTag = _ignoreTag;
         _dir.Normalize();
         m_Rb.velocity = _dir * shootForce;
-        m_SpriteRenderer.transform.right = m_Rb.velocity;  
+        m_SpriteRenderer.transform.right = m_Rb.velocity;
         Invoke("DeleteProjectile", _duration);
     }
     private void DeleteProjectile()
@@ -31,6 +31,7 @@ public class Projectile : MonoBehaviour
         // Do damage!
         _other.GetComponent<Health>()?.GetDamage(m_Damage);
 
+        if (_other.CompareTag("Light")) return;
 
         Destroy(this.gameObject);
     }

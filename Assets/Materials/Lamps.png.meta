@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b571aa397492be045b79c418e6637ff8
+guid: 97c779ee70f3b7a40bd30c187a8ad1de
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: decor_0
+      name: Lamps_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1
-        width: 11
-        height: 31
+        x: 0
+        y: 0
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 539c91eb208adc8449bc26f49c5cc127
-      internalID: -425085458
+      spriteID: de54bcaebfe10da409d2bc16575a7f6f
+      internalID: 1597300711
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: decor_1
+      name: Lamps_1
       rect:
         serializedVersion: 2
-        x: 17
+        x: 16
         y: 0
-        width: 14
-        height: 26
+        width: 16
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1677fb7ad84c5ae4aaa6204d30bfb2f6
-      internalID: 1017752641
+      spriteID: 6fb27bcbd24dea141af477d06f2e5cee
+      internalID: 759820264
       vertices: []
       indices: 
       edges: []
@@ -181,8 +181,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      decor_1: 1017752641
-      decor_0: -425085458
+      Lamps_1: 759820264
+      Lamps_0: 1597300711
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
