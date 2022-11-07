@@ -89,7 +89,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -110,11 +110,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SeesPlayer: 0
   IdleTime: 1
-  Speed: 3
-  AttackRange: 5
+  Speed: 5
+  AttackRange: 12
   VisionRange: 15
   Health: {fileID: 7262624197494182398}
   SpriteRenderer: {fileID: 7262624198383323700}
+  rb: {fileID: 7262624197494182397}
   EnemyData:
     EnemyPrefab: {fileID: 2271130227691108440}
     SpawnPoint: {x: 0, y: 0}

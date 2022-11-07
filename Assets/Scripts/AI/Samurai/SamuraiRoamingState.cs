@@ -32,10 +32,25 @@ public class SamuraiRoamingState : AIState
     public override void Update()
     {
         if (((Vector2)controller.transform.position - targetDestination).sqrMagnitude <= 0.05f)
+        {
+            controller.rb.drag = 50;
             switchIdleState.Invoke();
+        }
         else
-            controller.transform.position = Vector3.MoveTowards(controller.transform.position, targetDestination,
-                controller.Speed * Time.deltaTime);
+        {
+            controller.rb.drag = 0;
+
+            int dir = Mathf.CeilToInt(Mathf.Sign(targetDestination.x - controller.transform.position.x));
+
+            controller.rb.AddForce(Vector2.right * dir * controller.Speed);
+
+            if (Mathf.Abs(controller.rb.velocity.x) > controller.Speed)
+                controller.rb.velocity = new Vector2(Mathf.Sign(controller.rb.velocity.x) * controller.Speed, controller.rb.velocity.y); //Clamp velocity when max speed is reached!
+
+
+            //controller.transform.position = Vector3.MoveTowards(controller.transform.position, targetDestination,
+            //    controller.Speed * Time.deltaTime);
+        }
 
         if (roamTimer <= 0)
             switchIdleState.Invoke();

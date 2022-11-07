@@ -112,11 +112,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SeesPlayer: 0
   IdleTime: 1
-  Speed: 10
+  Speed: 15
   AttackRange: 0
   VisionRange: 10
   Health: {fileID: 7262624197494182398}
   SpriteRenderer: {fileID: 7262624198383323700}
+  rb: {fileID: 0}
   EnemyData:
     EnemyPrefab: {fileID: 0}
     SpawnPoint: {x: 0, y: 0}

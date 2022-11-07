@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private int m_Damage;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private float shootForce;
+    [SerializeField] private float m_PushBackForce;
     private string ignoredTag;
     public float Cooldown;
 
@@ -23,10 +24,20 @@ public class Projectile : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+    private void PushBack(Rigidbody2D _rb)
+    {
+        _rb.AddForce(m_Rb.velocity.normalized * m_PushBackForce, ForceMode2D.Impulse);
+
+        Debug.Log("Pushback " + _rb.name);
+    }
     private void OnTriggerEnter2D(Collider2D _other)
     {
         if (_other.CompareTag(ignoredTag)) return;
         if (_other.CompareTag("Projectile")) return;
+        if (_other.CompareTag("Item")) return;
+
+        if (_other.CompareTag("Enemy"))
+            PushBack(_other.GetComponent<Rigidbody2D>());
 
         // Do damage!
         _other.GetComponent<Health>()?.GetDamage(m_Damage);
@@ -34,5 +45,6 @@ public class Projectile : MonoBehaviour
         if (_other.CompareTag("Light")) return;
 
         Destroy(this.gameObject);
+
     }
 }

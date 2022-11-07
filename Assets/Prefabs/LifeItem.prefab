@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1291248816338897808}
   m_Layer: 0
   m_Name: LifeItem
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

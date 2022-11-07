@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Health : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Health : MonoBehaviour
     public int MaxHP { get { return m_MaxHP; } set { m_MaxHP = value; } }
 
     public Action E_TriggerDeath;
+
+    [SerializeField] private VisualEffect m_DamageParticles;
 
     private void Awake()
     {
@@ -30,5 +33,12 @@ public class Health : MonoBehaviour
 
         if (hp <= 0)
             E_TriggerDeath?.Invoke();
+
+        if (transform.CompareTag("Light")) return;
+
+        //m_DamageParticles.SetVector3("test", transform.position);
+        //m_DamageParticles.Play();
+
+        CameraManager.Instance.Shake();
     }
 }

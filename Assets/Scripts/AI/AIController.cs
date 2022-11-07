@@ -22,6 +22,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     // References
     public Health Health;
     public SpriteRenderer SpriteRenderer;
+    public Rigidbody2D rb;
     [HideInInspector] public EnemyData EnemyData;
     public AIPath Path;
     public Projectile ProjectilePrefab;

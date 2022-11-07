@@ -24,6 +24,7 @@ public class SamuraiAttackState : AIState
 
         if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= controller.AttackRange)
         {
+            controller.rb.drag = 50;
             if (shootCooldownTimer <= 0)
             {
                 Projectile p = GameObject.Instantiate(controller.ProjectilePrefab, controller.transform.position, Quaternion.identity);
@@ -34,18 +35,13 @@ public class SamuraiAttackState : AIState
         }
         else
         {
-            //Vector2 destination = new Vector2(PlayerController.Instance.transform.position.x, controller.transform.position.y);
+            controller.rb.drag = 0;
+            int dir = Mathf.CeilToInt(Mathf.Sign(PlayerController.Instance.transform.position.x - controller.transform.position.x));
 
-            //Vector2 rightPoint = new Vector3(controller.transform.position.x + 2, controller.transform.position.y - controller.transform.localScale.y / 2);
-            //Vector2 leftPoint = new Vector3(controller.transform.position.x - 2, controller.transform.position.y - controller.transform.localScale.y / 2);
+            controller.rb.AddForce(Vector2.right * dir * controller.Speed);
 
-            //Collider2D[] rightCol = Physics2D.OverlapBoxAll(rightPoint, Vector2.one, 0f, LayerMask.GetMask("Obstacle"));
-            //Collider2D[] leftCol = Physics2D.OverlapBoxAll(leftPoint, Vector2.one, 0f, LayerMask.GetMask("Obstacle"));
-
-            //if (leftCol.Length > 0 && rightCol.Length > 0)
-            //controller.transform.position = Vector3.MoveTowards(controller.transform.position, destination, controller.Speed * Time.deltaTime);
-
-            controller.transform.position = Vector3.MoveTowards(controller.transform.position, new Vector3(PlayerController.Instance.transform.position.x, controller.transform.position.y), controller.Speed * Time.deltaTime);
+            if (Mathf.Abs(controller.rb.velocity.x) > controller.Speed)
+                controller.rb.velocity = new Vector2(Mathf.Sign(controller.rb.velocity.x) * controller.Speed, controller.rb.velocity.y); //Clamp velocity when max speed is reached!
         }
     }
     public override void Exit()
