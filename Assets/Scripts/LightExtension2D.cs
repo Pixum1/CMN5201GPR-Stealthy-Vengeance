@@ -10,11 +10,11 @@ public class LightExtension2D : MonoBehaviour
     Health health;
     SpriteRenderer sprRend;
 
-    Sprite originalSprite;
     float originalIntensity;
     float offtimer;
     bool dead;
 
+    [SerializeField] Sprite m_AliveSprite;
     [SerializeField] Sprite m_DeadSprite;
     [SerializeField] float m_MaxTime = 25f;
 
@@ -29,7 +29,6 @@ public class LightExtension2D : MonoBehaviour
         health.E_TriggerDeath += DestroyLamp;
         ZoneManager.Instance.E_ChangedZone += RegenerateLamp;
 
-        originalSprite = sprRend.sprite;
         originalIntensity = light.intensity;
         
         offtimer = Random.Range(0, m_MaxTime);
@@ -54,7 +53,7 @@ public class LightExtension2D : MonoBehaviour
         dead = false;
 
         // change sprite
-        sprRend.sprite = m_DeadSprite;
+        sprRend.sprite = m_AliveSprite;
 
         // turn on light
         light.intensity = originalIntensity;
@@ -64,7 +63,7 @@ public class LightExtension2D : MonoBehaviour
         dead = true;
 
         // change sprite
-        sprRend.sprite = originalSprite;
+        sprRend.sprite = m_DeadSprite;
 
         // turn off light
         light.intensity = 0f;
