@@ -53,7 +53,7 @@ public class ZoneManager : MonoBehaviour
             if (Zones[i].IsActive && CurrentActiveZone != Zones[i])
             {
                 CurrentActiveZone = Zones[i];
-                E_ChangedZone.Invoke();
+                E_ChangedZone?.Invoke();
             }
         }
     }
