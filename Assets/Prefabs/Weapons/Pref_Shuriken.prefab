@@ -133,7 +133,7 @@ Transform:
   m_GameObject: {fileID: 6457978415998212948}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7869022995744336362}
@@ -176,8 +176,10 @@ MonoBehaviour:
   m_Rb: {fileID: 6970141249066623765}
   m_Damage: 1
   m_SpriteRenderer: {fileID: 4493311988437260406}
-  shootForce: 30
-  m_PushBackForce: 5
+  shootForce: 25
+  m_ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 8
   Cooldown: 0.25
 --- !u!58 &2112695659873490070
 CircleCollider2D:

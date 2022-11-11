@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7040977346285779269}
   - component: {fileID: 7040977346285779270}
-  - component: {fileID: 1899445737369461042}
   - component: {fileID: 3554908289388034944}
+  - component: {fileID: 5741429603279563594}
+  - component: {fileID: 9150178588778398668}
   m_Layer: 0
   m_Name: Pref_Ceiling_Lamp
   m_TagString: Light
@@ -87,20 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1899445737369461042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7040977346285779271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9e7c4d8220da443b551a77378d5989, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MaxHP: 1
-  m_DamageParticles: {fileID: 0}
 --- !u!114 &3554908289388034944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,13 +100,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ec1a12109779bd4c89719d83d1ad3c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 11
   m_FlickerFlag: 1
   m_Lights: {fileID: 12575940126505850}
+  m_Collider: {fileID: 9150178588778398668}
+  health: {fileID: 5741429603279563594}
+  sprRend: {fileID: 7040977346285779270}
   m_AliveSprite: {fileID: 1597300711, guid: 97c779ee70f3b7a40bd30c187a8ad1de, type: 3}
   m_DeadSprite: {fileID: 0}
   m_MaxTime: 0.25
   m_MinSize: 4.9
   m_MaxSize: 5.1
+--- !u!114 &5741429603279563594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7040977346285779271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8002ae21e26cced40976cda12196b979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxHP: 0
+  m_DamageParticles: {fileID: 0}
+--- !u!61 &9150178588778398668
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7040977346285779271}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 2}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2}
+  m_EdgeRadius: 0
 --- !u!1001 &2704225734651855899
 PrefabInstance:
   m_ObjectHideFlags: 0

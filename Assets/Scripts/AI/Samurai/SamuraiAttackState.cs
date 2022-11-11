@@ -8,6 +8,10 @@ public class SamuraiAttackState : AIState
     private Action switchIdleState;
     private float shootCooldownTimer;
     private float bulletLifeTime = 5f;
+    private float reloadTime = 2f;
+    private float reloadTimer;
+    private int maxAmmo = 4;
+    private int ammoCount = 4;
 
     public SamuraiAttackState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
@@ -25,12 +29,25 @@ public class SamuraiAttackState : AIState
         if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= controller.AttackRange)
         {
             controller.rb.drag = 50;
-            if (shootCooldownTimer <= 0)
-            {
-                Projectile p = GameObject.Instantiate(controller.ProjectilePrefab, controller.transform.position, Quaternion.identity);
-                p.Launch(PlayerController.Instance.transform.position - controller.transform.position, bulletLifeTime, "Enemy");
 
-                shootCooldownTimer = controller.ProjectilePrefab.Cooldown;
+            if (ammoCount > 0)
+            {
+                reloadTimer = reloadTime;
+                if (shootCooldownTimer <= 0)
+                {
+                    Projectile p = GameObject.Instantiate(controller.ProjectilePrefab, controller.transform.position, Quaternion.identity);
+                    p.Launch(PlayerController.Instance.transform.position - controller.transform.position, bulletLifeTime, LayerMask.GetMask("Enemy"));
+
+                    shootCooldownTimer = controller.ProjectilePrefab.Cooldown;
+                    ammoCount--;
+                }
+            }
+            else
+            {
+                reloadTimer -= Time.deltaTime;
+
+                if (reloadTimer <= 0)
+                    ammoCount = maxAmmo;
             }
         }
         else

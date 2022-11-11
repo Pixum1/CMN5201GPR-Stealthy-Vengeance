@@ -33,7 +33,6 @@ public abstract class AIController : MonoBehaviour, IAIControlls
 
     private void Start()
     {
-        Health.SetHP(Health.MaxHP);
         InitializeFSM();
     }
     private void Update()

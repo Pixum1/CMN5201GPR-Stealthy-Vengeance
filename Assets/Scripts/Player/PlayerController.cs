@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float acceleration = 70f; // The movement speed acceleration of the player
+    private float accelerationRuntime;
     [SerializeField] private float maxSpeed = 12f; // The maximum speed of the player
     [SerializeField] private float groundLinDrag = 20f; // The friction applied when not moving <= decceleration
 
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fullJumpFallMultiplier = 8f; // Gravity applied when doing a full jump
     [SerializeField] private float halfJumpFallMultiplier = 5f; // Gravity applied when doing half jump
     [SerializeField] private int amountOfJumps = 1; // The amount of additional jumps the player can make
+    [SerializeField] private float m_AirborneSteer = 35f;
     private int jumpsCounted;
     private Vector2 lastJumpPos;
 
@@ -92,6 +94,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D RigidBody;
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
+    [SerializeField] private ScriptableInt m_PlayerHealth;
     public Health Health;
     private Camera mainCam;
     private Mouse mouse;
@@ -134,8 +137,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        Health.SetHP(Health.MaxHP);
-
         mouse = Mouse.current;
         mainCam = Camera.main;
 
@@ -187,9 +188,12 @@ public class PlayerController : MonoBehaviour
             jumpsCounted = 0; //reset jumps counter
             coyoteTimeTimer = 0; //reset coyote time counter
             isDashing = false;
+            accelerationRuntime = acceleration;
         }
         else
         {
+            accelerationRuntime = m_AirborneSteer;
+
             ApplyAirLinearDrag();
 
             if (canWallHang)
@@ -294,7 +298,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move(float _xDir)
     {
-        RigidBody.AddForce(new Vector2(_xDir, 0) * acceleration);
+        RigidBody.AddForce(new Vector2(_xDir, 0) * accelerationRuntime);
         if (Mathf.Abs(RigidBody.velocity.x) > maxSpeed)
             RigidBody.velocity = new Vector2(Mathf.Sign(RigidBody.velocity.x) * maxSpeed, RigidBody.velocity.y); //Clamp velocity when max speed is reached!
     }
@@ -328,6 +332,7 @@ public class PlayerController : MonoBehaviour
         RigidBody.AddForce(_dir * jumpForce, ForceMode2D.Impulse);
 
         //CameraManager.Instance.Shake(.05f, .05f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.JumpSound);
     }
 
     private void Dash(float _x, float _y, bool directionBased = false)

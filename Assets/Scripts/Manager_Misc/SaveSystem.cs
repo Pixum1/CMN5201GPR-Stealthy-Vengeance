@@ -34,6 +34,8 @@ public class SaveSystem : MonoBehaviour
 
     private string saveFilePath;
 
+    [SerializeField] private ScriptableInt m_PlayerHealth;
+
     public Action e_SaveGame;
     public Action e_LoadGame;
 
@@ -90,7 +92,7 @@ public class SaveSystem : MonoBehaviour
         SaveObject data = new SaveObject()
         {
             PlayerPosition = PlayerController.Instance.transform.position,
-            PlayerHealth = PlayerController.Instance.Health.HP,
+            PlayerHealth = m_PlayerHealth.Value,
             AmountOfJumps = PlayerController.Instance.AmountOfJumps,
             AllowWallClimb = PlayerController.Instance.AllowWallClimb,
             AllowWallHang = PlayerController.Instance.AllowWallHang,
@@ -100,6 +102,7 @@ public class SaveSystem : MonoBehaviour
             AllowMoving = PlayerController.Instance.AllowMoving,
             CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
             CameraZones = GameManager.Instance.ZoneSaves,
+            FakeLights = GameManager.Instance.FakeLightsSaves,
         };
 
         return data;
@@ -107,7 +110,7 @@ public class SaveSystem : MonoBehaviour
     private void ApplyAllSaveData(SaveObject _data)
     {
         PlayerController.Instance.transform.position = _data.PlayerPosition;
-        PlayerController.Instance.Health.HP = _data.PlayerHealth;
+        m_PlayerHealth.Value = _data.PlayerHealth;
         PlayerController.Instance.AmountOfJumps = _data.AmountOfJumps;
         PlayerController.Instance.AllowWallClimb = _data.AllowWallClimb;
         PlayerController.Instance.AllowWallHang = _data.AllowWallHang;
@@ -128,6 +131,17 @@ public class SaveSystem : MonoBehaviour
         }
 
         GameManager.Instance.ZoneSaves = _data.CameraZones;
+
+        for (int i = 0; i < GameManager.Instance.FakeLights.Length; i++)
+        {
+            for (int k = 0; k < _data.FakeLights.Count; k++)
+            {
+                if (GameManager.Instance.FakeLights[i].ID == _data.FakeLights[k].LightID)
+                    GameManager.Instance.FakeLights[i].Dead = _data.FakeLights[k].IsDead;
+            }
+        }
+
+        GameManager.Instance.FakeLightsSaves = _data.FakeLights;
     }
 }
 public class SaveObject
@@ -144,6 +158,7 @@ public class SaveObject
     public bool AllowMoving;
     public List<Item> CollectedCollectibles;
     public List<CameraZoneSaveData> CameraZones;
+    public List<FakeLightSaveData> FakeLights;
 }
 [System.Serializable]
 public struct CameraZoneSaveData
@@ -154,5 +169,16 @@ public struct CameraZoneSaveData
     {
         ZoneID = _ID;
         WasVisited = _wasVisited;
+    }
+}
+[System.Serializable]
+public struct FakeLightSaveData
+{
+    public ushort LightID;
+    public bool IsDead;
+    public FakeLightSaveData(ushort _ID, bool _isDead)
+    {
+        LightID = _ID;
+        IsDead = _isDead;
     }
 }

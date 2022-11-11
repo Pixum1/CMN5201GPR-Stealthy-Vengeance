@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0327eb0aa50214c4bab75726fa600422, type: 3}
-  m_Name: AllowDashEvent
+  m_Script: {fileID: 11500000, guid: 8bb0d0a330f80d741a12ea5f28033f42, type: 3}
+  m_Name: SV_PlayerHealth
   m_EditorClassIdentifier: 
+  m_DefaultValue: 10

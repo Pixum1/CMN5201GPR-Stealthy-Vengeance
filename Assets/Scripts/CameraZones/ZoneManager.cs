@@ -12,24 +12,29 @@ public class ZoneManager : MonoBehaviour
     private void Initialize()
     {
         if (instance != null && instance != this)
-            Destroy(this);
+        {
+            Destroy(this.gameObject);
+        }
         else
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
     }
+
     private void Terminate()
     {
         if (this == Instance)
+        {
             instance = null;
+        }
     }
     #endregion
-
-    [SerializeField] public LayerMask PlayerLayer;
     [SerializeField] private Vector2 standardSize = new Vector2(40, 22);
     [SerializeField] private GameObject m_MapVisuals;
+
     public CameraZone[] Zones;
+    public LayerMask PlayerLayer;
     public CameraZone CurrentActiveZone;
     public ScriptableEvent StartEncounterEvent;
     public ScriptableEvent EndEncounterEvent;

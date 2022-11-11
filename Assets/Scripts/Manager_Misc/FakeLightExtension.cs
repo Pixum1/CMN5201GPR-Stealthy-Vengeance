@@ -5,38 +5,66 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class FakeLightExtension : MonoBehaviour
 {
-    Health health;
-    SpriteRenderer sprRend;
+    public ushort ID = 0;
 
-    float offtimer;
-    bool dead;
-
-    [SerializeField] bool m_FlickerFlag;
-    [SerializeField] GameObject m_Lights;
-    [SerializeField] Sprite m_AliveSprite;
-    [SerializeField] Sprite m_DeadSprite;
-    [SerializeField] float m_MaxTime = 25f;
-
-    [SerializeField] float m_MinSize;
-    [SerializeField] float m_MaxSize;
-
-    private void Awake()
+    private float offtimer;
+    private bool dead;
+    public bool Dead
     {
-        health = GetComponent<Health>();
-        sprRend = GetComponent<SpriteRenderer>();
+        get { return dead; }
+
+        set
+        {
+            if (value == dead) return;
+
+            dead = value;
+
+            if (value == true)
+            {
+                DestroyLamp();
+                if (GameManager.Instance != null)
+                    for (int i = 0; i < GameManager.Instance.FakeLightsSaves.Count; i++)
+                    {
+                        // Find this zone in the GameManagers zone list
+                        if (GameManager.Instance.FakeLightsSaves[i].LightID != ID) continue;
+
+                        // Create a new data object at the location in the list
+                        GameManager.Instance.FakeLightsSaves[i] = new FakeLightSaveData(ID, true);
+                    }
+            }
+            else
+                RegenerateLamp();
+        }
     }
+
+    [SerializeField] private bool m_FlickerFlag;
+    [SerializeField] private GameObject m_Lights;
+    [SerializeField] private BoxCollider2D m_Collider;
+    [SerializeField] private Health health;
+    [SerializeField] private SpriteRenderer sprRend;
+    [SerializeField] private Sprite m_AliveSprite;
+    [SerializeField] private Sprite m_DeadSprite;
+    [SerializeField] private float m_MaxTime = 25f;
+
+    [SerializeField] private float m_MinSize;
+    [SerializeField] private float m_MaxSize;
+
     private void Start()
     {
+        GameManager.Instance.FakeLightsSaves.Add(new FakeLightSaveData(ID, Dead));
+
         health.E_TriggerDeath += DestroyLamp;
-        ZoneManager.Instance.E_ChangedZone += RegenerateLamp;
+
+        // ZoneManager.Instance.E_ChangedZone += RegenerateLamp;
 
         // set original size
+        m_Lights.SetActive(true);
 
         offtimer = Random.Range(0, m_MaxTime);
     }
     private void Update()
     {
-        if (dead) return;
+        if (Dead) return;
         if (!m_FlickerFlag) return;
 
         if (offtimer <= 0)
@@ -46,21 +74,13 @@ public class FakeLightExtension : MonoBehaviour
         }
 
         offtimer -= Time.deltaTime;
-
-        //if (offtimer <= 0)
-        //{
-        //    // set light size to 0
-        //    offtimer = Random.Range(0, m_MaxTime);
-        //}
-        //else
-        //{
-        //    // reset light size
-        //}
-        //offtimer -= Time.deltaTime;
     }
     private void RegenerateLamp()
     {
-        dead = false;
+        Dead = false;
+
+        // turn on collider
+        m_Collider.enabled = true;
 
         // change sprite
         sprRend.sprite = m_AliveSprite;
@@ -70,7 +90,10 @@ public class FakeLightExtension : MonoBehaviour
     }
     private void DestroyLamp()
     {
-        dead = true;
+        Dead = true;
+
+        // turn off collider
+        m_Collider.enabled = false;
 
         // change sprite
         sprRend.sprite = m_DeadSprite;

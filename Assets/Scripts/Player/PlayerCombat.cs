@@ -45,7 +45,7 @@ public class PlayerCombat : MonoBehaviour
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));
 
                     Projectile p = Instantiate(m_Projectile, pos, Quaternion.identity);
-                    p.Launch(dir, m_BulletLifeTime, "Player");
+                    p.Launch(dir, m_BulletLifeTime, LayerMask.GetMask("Player"));
 
                     timer = m_Projectile.Cooldown;
                     break;
@@ -64,7 +64,7 @@ public class PlayerCombat : MonoBehaviour
                     StartCoroutine(TriggerFloatingPrjectile(m_FloatingProjectiles[i]));
 
                     Projectile p = Instantiate(m_Projectile, pos, Quaternion.identity);
-                    p.Launch(dir, m_BulletLifeTime, "Player");
+                    p.Launch(dir, m_BulletLifeTime, LayerMask.GetMask("Player"));
 
                     timer = m_Projectile.Cooldown;
                     break;

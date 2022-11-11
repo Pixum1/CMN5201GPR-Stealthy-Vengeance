@@ -25,8 +25,10 @@ public class BatAttackState : AIState
 
         if (cols.Length != 0)
         {
+            float dir = Mathf.Sign(PlayerController.Instance.transform.position.x - controller.transform.position.x);
+
             // Deal damage
-            PlayerController.Instance.Health.GetDamage(1);
+            PlayerController.Instance.Health.GetDamage(1, Vector3.one * dir);
 
             // Return to idle state
             switchIdleState.Invoke();

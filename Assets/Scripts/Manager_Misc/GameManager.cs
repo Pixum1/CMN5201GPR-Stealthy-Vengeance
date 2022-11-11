@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,17 +34,36 @@ public class GameManager : MonoBehaviour
     public PlayerInput PlayerInput;
     public List<Item> CollectedCollectibles;
     public List<CameraZoneSaveData> ZoneSaves;
+    public List<FakeLightSaveData> FakeLightsSaves;
+    public FakeLightExtension[] FakeLights;
+
+    private void OnValidate()
+    {
+        FakeLightExtension[] lights = FindObjectsOfType<FakeLightExtension>();
+
+        for (int i = 0; i < lights.Length; i++)
+        {
+            if (lights[i].ID != 0) continue;
+
+            for (int k = 0; k < lights.Length; k++)
+            {
+                if (lights[i].ID <= lights[k].ID)
+                    lights[i].ID = (ushort)(lights[k].ID + 1);
+            }
+        }
+    }
 
     private void Awake()
     {
         Initialize();
 
+        FakeLightsSaves = new List<FakeLightSaveData>();
         PlayerInput = GetComponent<PlayerInput>();
     }
 
     private void Start()
     {
-
+        FakeLights = FindObjectsOfType<FakeLightExtension>();
     }
 
 #if UNITY_EDITOR
