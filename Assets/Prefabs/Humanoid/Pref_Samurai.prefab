@@ -109,7 +109,7 @@ VFXRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
 --- !u!1 &6624560317516354170
 GameObject:
   m_ObjectHideFlags: 0
