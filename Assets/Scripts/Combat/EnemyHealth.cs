@@ -34,6 +34,7 @@ public class EnemyHealth : Health
 
         if (base.hp - 1 <= 0)
         {
+            m_BloodParticles.transform.SetParent(null);
             m_DespawnParticles.transform.SetParent(null);
             m_DespawnParticles.Play();
         }

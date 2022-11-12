@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerController : MonoBehaviour
@@ -75,6 +76,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float halfJumpFallMultiplier = 5f; // Gravity applied when doing half jump
     [SerializeField] private int amountOfJumps = 1; // The amount of additional jumps the player can make
     [SerializeField] private float m_AirborneSteer = 35f;
+    [SerializeField] private VisualEffect m_JumpParticles;
+    [SerializeField] private VisualEffect m_LandingParticles; 
     private int jumpsCounted;
     private Vector2 lastJumpPos;
 
@@ -105,6 +108,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveVal;
     private Vector3 mousePos;
+    private float previousYVelocity = 0;
 
     private float horizontalDir => moveVal.x;
     private float verticalDir => moveVal.y;
@@ -149,6 +153,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
+
         mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
 
         #region Player looking rotation
@@ -184,6 +189,14 @@ public class PlayerController : MonoBehaviour
 
         if (cc.m_IsGrounded)
         {
+            if (previousYVelocity < -20)
+            {
+                CameraManager.Instance.Shake();
+
+                m_LandingParticles.SetFloat("MoveDir", horizontalDir);
+                m_LandingParticles.Play();
+            }
+
             ApplyGroundLinearDrag();
             jumpsCounted = 0; //reset jumps counter
             coyoteTimeTimer = 0; //reset coyote time counter
@@ -220,6 +233,8 @@ public class PlayerController : MonoBehaviour
         dashCDTimer += Time.deltaTime;
         wallHopBufferTimer += Time.deltaTime;
         #endregion
+
+        previousYVelocity = RigidBody.velocity.y;
     }
 
     private void FixedUpdate()
@@ -308,6 +323,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Jump(float _jumpHeight, Vector2 _dir)
     {
+        // Play sound
+        SoundManager.Instance.PlaySound(SoundManager.Instance.JumpSound);
+
+        // Play particles
+        m_JumpParticles.SetFloat("MoveDir", -horizontalDir);
+        m_JumpParticles.Play();
+
         if (coyoteTimeTimer > coyoteTimeTime && jumpsCounted < 1)
         {
             jumpsCounted = amountOfJumps;
@@ -330,9 +352,6 @@ public class PlayerController : MonoBehaviour
 
         jumpForce = Mathf.Sqrt(_jumpHeight * -2f * (Physics.gravity.y * RigidBody.gravityScale));
         RigidBody.AddForce(_dir * jumpForce, ForceMode2D.Impulse);
-
-        //CameraManager.Instance.Shake(.05f, .05f);
-        SoundManager.Instance.PlaySound(SoundManager.Instance.JumpSound);
     }
 
     private void Dash(float _x, float _y, bool directionBased = false)

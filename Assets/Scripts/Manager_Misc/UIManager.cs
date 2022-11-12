@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +36,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Healthbar")]
     [SerializeField] private Image[] m_HealthContainer;
+    [SerializeField] private GameObject m_Healthbar;
     [SerializeField] private ScriptableInt m_PlayerHealth;
     [SerializeField] private Sprite m_FullHeart;
     [SerializeField] private Sprite m_HalfHeart;
@@ -43,28 +45,26 @@ public class UIManager : MonoBehaviour
     {
         m_PlayerHealth.Register(UpdateHealthBar);
     }
+
     private void UpdateHealthBar()
     {
-        for (int i = m_PlayerHealth.Value; i > 0; i--)
+        for (int i = 1; i < m_HealthContainer.Length + 1; i++)
         {
+            // enables healthcontainer
+            m_HealthContainer[i - 1].enabled = true;
 
-            // i / 2 - 1??????
-            int c = Mathf.FloorToInt(i / 2);
-
-            Debug.Log(c);
+            // check if playerhealth is less or equal than the current healthcontainer index doubled
+            if (i + i <= m_PlayerHealth.Value)
+                m_HealthContainer[i - 1].sprite = m_FullHeart;
+            // check if playerhealth is less or equal than the current healthcontainer index doubled MINUS one
+            else if (i + i - 1 <= m_PlayerHealth.Value)
+                m_HealthContainer[i - 1].sprite = m_HalfHeart;
+            // if none of the above: disable healthcontainer
+            else
+                m_HealthContainer[i - 1].enabled = false;
         }
-
-        //for (int i = 0; i < m_HealthContainer.Length; i++)
-        //{
-        //    if ((m_PlayerHealth.Value - 1) / 2f >= i)
-        //    {
-        //        m_HealthContainer[i].enabled = true;
-        //        continue;
-        //    }
-
-        //    m_HealthContainer[i].enabled = false;
-        //}
     }
+
     private void OnDestroy()
     {
         m_PlayerHealth.UnRegister(UpdateHealthBar);

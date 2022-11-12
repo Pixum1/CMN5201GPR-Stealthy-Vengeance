@@ -338,7 +338,8 @@ public class CameraManager : MonoBehaviour
         while (timer < _duration)
         {
             randomValue = UnityEngine.Random.insideUnitCircle.normalized;
-            newPos = new Vector2(randomValue.x * _intensity, randomValue.y * _intensity);
+            newPos = new Vector2(randomValue.x * _intensity, 0); // Shake only in X direction
+            //newPos = new Vector2(randomValue.x * _intensity, randomValue.y * _intensity); // Shake in every direction
 
             Camera.main.transform.localPosition += (Vector3)newPos;
 

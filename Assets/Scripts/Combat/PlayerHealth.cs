@@ -43,6 +43,7 @@ public class PlayerHealth : Health
         if (m_PlayerHealth.Value <= 0)
         {
             m_DespawnParticles.transform.SetParent(null);
+            m_BloodParticles.transform.SetParent(null);
             m_DespawnParticles.Play();
             E_TriggerDeath?.Invoke();
         }
