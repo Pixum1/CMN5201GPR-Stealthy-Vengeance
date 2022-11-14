@@ -33,6 +33,24 @@ public class MapManager : MonoBehaviour
     private Vector2 mapBoundsMin = Vector2.zero;
     private Camera cam;
 
+    private void Awake()
+    {
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").started += OnMiniMap;
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").canceled += OnMiniMap;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MaxiMap").performed += OnMaxiMap;
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MaxiMap").canceled += OnMaxiMap;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Move").performed += OnMove;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Move").canceled += OnMove;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Close").performed += OnClose;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Close").canceled += OnClose;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").performed += OnZoom;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").canceled += OnZoom;
+    }
+
     private void Start()
     {
         cam = GetComponent<Camera>();

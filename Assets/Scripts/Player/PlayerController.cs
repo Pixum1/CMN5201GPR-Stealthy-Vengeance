@@ -137,6 +137,25 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Initialize();
+        InitializeInput();
+
+    }
+
+    private void InitializeInput()
+    {
+        InputActionMap map = GameManager.Instance.PlayerInput.currentActionMap;
+
+        map.FindAction("Move").performed += OnMove;
+        map.FindAction("Move").canceled += OnMove;
+
+        map.FindAction("Jump").performed += OnJump;
+        map.FindAction("Jump").canceled += OnJump;
+
+        map.FindAction("Dash").performed += OnDash;
+        map.FindAction("Dash").canceled += OnDash;
+
+        map.FindAction("WallHang").performed += OnWallHang;
+        map.FindAction("WallHang").canceled += OnWallHang;
     }
 
     private void Start()

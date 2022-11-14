@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,10 +33,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public PlayerInput PlayerInput;
-    public List<Item> CollectedCollectibles;
-    public List<CameraZoneSaveData> ZoneSaves;
-    public List<FakeLightSaveData> FakeLightsSaves;
-    public FakeLightExtension[] FakeLights;
+    [HideInInspector] public List<Item> CollectedCollectibles;
+    [HideInInspector] public List<CameraZoneSaveData> ZoneSaves;
+    [HideInInspector] public List<FakeLightSaveData> FakeLightsSaves;
+    [HideInInspector] public FakeLightExtension[] FakeLights;
 
     private void OnValidate()
     {
@@ -58,12 +59,13 @@ public class GameManager : MonoBehaviour
         Initialize();
 
         FakeLightsSaves = new List<FakeLightSaveData>();
-        PlayerInput = GetComponent<PlayerInput>();
     }
 
     private void Start()
     {
-        FakeLights = FindObjectsOfType<FakeLightExtension>();
+        // In Game
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
+            FakeLights = FindObjectsOfType<FakeLightExtension>();
     }
 
 #if UNITY_EDITOR
@@ -88,4 +90,9 @@ public class GameManager : MonoBehaviour
         SaveSystem.Instance.e_LoadGame?.Invoke();
     }
     #endregion
+
+    private void OnDestroy()
+    {
+        Terminate();
+    }
 }

@@ -53,7 +53,10 @@ VisualEffect:
     m_Vector2f:
       m_Array: []
     m_Vector3f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0.5, y: 0.5, z: 0.5}
+        m_Name: Force
+        m_Overridden: 1
     m_Vector4f:
       m_Array: []
     m_Uint:
@@ -96,7 +99,7 @@ VisualEffect:
           m_NumColorKeys: 3
           m_NumAlphaKeys: 2
         m_Name: Color
-        m_Overridden: 0
+        m_Overridden: 1
     m_NamedObject:
       m_Array: []
     m_Bool:
@@ -190,7 +193,10 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 0
+        m_Name: MoveDir
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -448,7 +454,7 @@ MonoBehaviour:
   RigidBody: {fileID: 4333900425158727652}
   m_SpriteRenderer: {fileID: 4333900427149535733}
   cc: {fileID: 4333900425158727658}
-  m_PlayerHealth: {fileID: 0}
+  m_PlayerHealth: {fileID: 11400000, guid: f6a0ac328f262944f8a34ba061a96195, type: 2}
   Health: {fileID: 1940347140}
 --- !u!114 &4333900425158727658
 MonoBehaviour:
@@ -1362,7 +1368,10 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 0
+        m_Name: MoveDir
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:

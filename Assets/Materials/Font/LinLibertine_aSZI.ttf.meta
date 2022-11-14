@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: cc7d183425a315a4fb11e900b6a34432
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Linux Libertine Capitals
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c685315b20992364ab80752f572f3f4d, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

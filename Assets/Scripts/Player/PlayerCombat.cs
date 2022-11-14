@@ -15,6 +15,12 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float m_BulletLifeTime;
     [SerializeField] private SpriteRenderer[] m_FloatingProjectiles;
 
+    private void Awake()
+    {
+        GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").performed += OnFire;
+        GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").canceled += OnFire;
+    }
+
     private void Start()
     {
         mouse = Mouse.current;
