@@ -18,7 +18,6 @@ public class ZoneManager : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -36,8 +35,8 @@ public class ZoneManager : MonoBehaviour
     public CameraZone[] Zones;
     public LayerMask PlayerLayer;
     public CameraZone CurrentActiveZone;
-    public ScriptableEvent StartEncounterEvent;
-    public ScriptableEvent EndEncounterEvent;
+    //public ScriptableEvent StartEncounterEvent;
+    //public ScriptableEvent EndEncounterEvent;
     public Action E_ChangedZone;
 
     private void Awake()

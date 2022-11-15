@@ -65,6 +65,15 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     }
     public virtual void UpdateLogic()
     {
+        if (prevMoveDir.x < transform.position.x)
+            SpriteRenderer.flipX = false;
+        else if (prevMoveDir.x > transform.position.x)
+            SpriteRenderer.flipX = true;
+
+        prevMoveDir = transform.position;
+
+        if (PlayerController.Instance == null) return;
+
         float range = (transform.position - PlayerController.Instance.transform.position).sqrMagnitude;
 
         if (range <= Mathf.Pow(VisionRange, 2))
@@ -87,12 +96,6 @@ public abstract class AIController : MonoBehaviour, IAIControlls
             SeesPlayer = false;
         }
 
-        if (prevMoveDir.x < transform.position.x)
-            SpriteRenderer.flipX = false;
-        else if (prevMoveDir.x > transform.position.x)
-            SpriteRenderer.flipX = true;
-
-        prevMoveDir = transform.position;
     }
     public void SwitchIdleState()
     {

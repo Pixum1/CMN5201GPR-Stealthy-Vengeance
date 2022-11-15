@@ -147,7 +147,7 @@ public class CameraZone : MonoBehaviour
     private IEnumerator StartEvent()
     {
         Debug.Log("Event started");
-        ZoneManager.Instance.StartEncounterEvent.RaiseEvent();
+        //ZoneManager.Instance.StartEncounterEvent.RaiseEvent();
 
         // Player moves to middle of the screen
         yield return MovePlayerToPos(new Vector2(transform.position.x, PlayerController.Instance.transform.position.y));
@@ -188,7 +188,7 @@ public class CameraZone : MonoBehaviour
                 break;
         }
         // Play animation or particles
-        ZoneManager.Instance.EndEncounterEvent.RaiseEvent();
+        //ZoneManager.Instance.EndEncounterEvent.RaiseEvent();
     }
 
     private IEnumerator MovePlayerToPos(Vector2 _pos)

@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -137,7 +136,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Initialize();
-        InitializeInput();
 
     }
 
@@ -157,9 +155,26 @@ public class PlayerController : MonoBehaviour
         map.FindAction("WallHang").performed += OnWallHang;
         map.FindAction("WallHang").canceled += OnWallHang;
     }
+    private void RemoveBindings()
+    {
+        InputActionMap map = GameManager.Instance.PlayerInput.currentActionMap;
+
+        map.FindAction("Move").performed -= OnMove;
+        map.FindAction("Move").canceled -= OnMove;
+
+        map.FindAction("Jump").performed -= OnJump;
+        map.FindAction("Jump").canceled -= OnJump;
+
+        map.FindAction("Dash").performed -= OnDash;
+        map.FindAction("Dash").canceled -= OnDash;
+
+        map.FindAction("WallHang").performed -= OnWallHang;
+        map.FindAction("WallHang").canceled -= OnWallHang;
+    }
 
     private void Start()
     {
+        InitializeInput();
         mouse = Mouse.current;
         mainCam = Camera.main;
 
@@ -294,8 +309,9 @@ public class PlayerController : MonoBehaviour
     private void PlayerDied()
     {
         Debug.LogWarning("Player Dies");
-
-        m_SpriteRenderer.color = Color.red;
+        UIManager.Instance.OpenDeathPanel();
+        //this.gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 
     #region Input
@@ -463,6 +479,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
+        MapManager.Instance.RemoveBindings();
+        RemoveBindings();
         Terminate();
     }
 }

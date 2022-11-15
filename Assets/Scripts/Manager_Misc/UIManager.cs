@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 public class UIManager : MonoBehaviour
 {
@@ -50,7 +51,6 @@ public class UIManager : MonoBehaviour
 
     [Header("Level Transitions")]
     [SerializeField] private float m_TransitionSpeed;
-    private bool transitionFlag;
     private Color color = new Color(0, 0, 0, 0);
 
     [Header("Objects")]
@@ -60,6 +60,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject m_OptionsPanel;
     [SerializeField] private GameObject[] m_MenuItems;
     [SerializeField] private Image m_TransitionImage;
+    [SerializeField] private SpriteRenderer m_CampfireTransitionImage;
+    [SerializeField] private GameObject m_BlurredBackground;
+    [SerializeField] private GameObject m_DeathPanel;
 
     [Header("Cursor")]
     [SerializeField] private GameObject m_CursorObject;
@@ -74,6 +77,12 @@ public class UIManager : MonoBehaviour
         Initialize();
 
         m_PlayerHealth.Register(UpdateHealthBar);
+    }
+
+    public void OnPause(CallbackContext _ctx)
+    {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+            OpenPausePanel();
     }
 
     private void UpdateHealthBar()
@@ -117,39 +126,22 @@ public class UIManager : MonoBehaviour
 
         m_CursorObject.transform.position = mousePos;
 
-        //#region InMenu
-        //if (menuTransitionFlag)
-        //{
 
-        //}
-        //#endregion
-
-        //#region InGame
-        //if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
-        //{
-        //    if (Input.GetButtonDown("Escape"))
-        //    {
-        //        TriggerPanel(m_PausePanel);
-        //        if (m_OptionsPanel.active)
-        //            TriggerPanel(m_OptionsPanel);
-        //    }
-        //}
-        //#endregion
-
-
+    }
+    public void LoadMenu()
+    {
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].Disable();
+        StartCoroutine(InGameTransition());
     }
     public void LoadGame(bool _newGameFlag)
     {
-        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
-            StartCoroutine(InGameTransition(1));
-        else
-            StartCoroutine(Transition(1, _newGameFlag));
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].Disable();
+        StartCoroutine(Transition(1, _newGameFlag));
     }
-    private IEnumerator InGameTransition(int _sceneIndex)
+    private IEnumerator InGameTransition()
     {
-        transitionFlag = true;
         Time.timeScale = 0f;
-        if (m_PausePanel.active)
+        if (m_PausePanel.activeSelf)
             m_PausePanel.SetActive(false);
 
         while (m_TransitionImage.color.a < 1)
@@ -158,18 +150,31 @@ public class UIManager : MonoBehaviour
             m_TransitionImage.color = color;
             yield return null;
         }
+
         Time.timeScale = 1f;
-        SceneManager.LoadScene(_sceneIndex);
-        m_MainMenuUI.SetActive(true);
+        SceneManager.LoadScene(0);
         m_InGameUI.SetActive(false);
 
         m_CursorSprite.sprite = m_MenuCursorTexture;
         m_VFXCursorObject.SetActive(true);
+        color = new Color(0, 0, 0, 1);
+
+        while (m_TransitionImage.color.a > 0)
+        {
+            color.a -= Time.unscaledDeltaTime / m_TransitionSpeed;
+            m_TransitionImage.color = color;
+            yield return null;
+        }
+        color = new Color(0, 0, 0, 0);
+        m_MainMenuUI.SetActive(true);
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].Enable();
+
     }
 
     private IEnumerator Transition(int _sceneIndex, bool _newGameFlag)
     {
-        //this.GetComponent<Canvas>().enabled = false;
+        CloseDeathPanel();
 
         // while screen is fading to black do
         while (m_TransitionImage.color.a < 1)
@@ -179,12 +184,37 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
 
+        color = new Color(0, 0, 0, 0);
+
         AsyncOperation load = SceneManager.LoadSceneAsync(_sceneIndex);
+        load.allowSceneActivation = false;
+
+        while (load.progress < .9f)
+        {
+            yield return null;
+        }
+
+        while (m_CampfireTransitionImage.color.a < 1)
+        {
+            color.a += Time.unscaledDeltaTime / m_TransitionSpeed;
+            m_CampfireTransitionImage.color = color;
+            yield return null;
+        }
+        color = new Color(0, 0, 0, 1);
+        load.allowSceneActivation = true;
 
         while (!load.isDone)
         {
             yield return null;
         }
+
+        //while (m_TransitionImage.color.a > 0)
+        //{
+        //    color.a -= Time.unscaledDeltaTime / m_TransitionSpeed;
+        //    m_TransitionImage.color = color;
+        //    yield return null;
+        //}
+        //color = new Color(0, 0, 0, 0);
 
         if (!_newGameFlag)
             GameManager.Instance.OnLoadGame();
@@ -192,11 +222,32 @@ public class UIManager : MonoBehaviour
         m_InGameUI.SetActive(true);
         m_MainMenuUI.SetActive(false);
         m_TransitionImage.color = new Color(0, 0, 0, 0);
+        m_CampfireTransitionImage.color = new Color(0, 0, 0, 0);
 
         m_CursorSprite.sprite = m_InGameCursorTexture;
         m_VFXCursorObject.SetActive(false);
-    }
 
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].Enable();
+
+    }
+    public void OpenDeathPanel()
+    {
+        for (int i = 0; i < m_MenuItems.Length; i++)
+        {
+            m_MenuItems[i].SetActive(false);
+        }
+        m_DeathPanel.SetActive(true);
+        m_BlurredBackground.SetActive(true);
+    }
+    private void CloseDeathPanel()
+    {
+        for (int i = 0; i < m_MenuItems.Length; i++)
+        {
+            m_MenuItems[i].SetActive(false);
+        }
+        m_DeathPanel.SetActive(false);
+        m_BlurredBackground.SetActive(false);
+    }
     public void ExitGame()
     {
         Application.Quit();
@@ -205,20 +256,41 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < m_MenuItems.Length; i++)
         {
-            m_MenuItems[i].SetActive(!m_MenuItems[i].active);
+            m_MenuItems[i].SetActive(false);
         }
-        _panel.SetActive(!_panel.active);
+        _panel.SetActive(true);
+    }
+    public void OpenPausePanel()
+    {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1)) return;
+        if (m_DeathPanel.activeInHierarchy) return;
 
-        if (_panel == m_PausePanel)
+        for (int i = 0; i < m_MenuItems.Length; i++)
         {
-            if (!transitionFlag)
-            {
-                if (m_PausePanel.active)
-                    Time.timeScale = 0f;
-                else if (!m_PausePanel.active)
-                    Time.timeScale = 1f;
-            }
+            m_MenuItems[i].SetActive(false);
         }
+        m_PausePanel.SetActive(true);
+        m_BlurredBackground.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void ClosePausePanel()
+    {
+        if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1)) return;
+
+        for (int i = 0; i < m_MenuItems.Length; i++)
+        {
+            m_MenuItems[i].SetActive(false);
+        }
+        m_PausePanel.SetActive(false);
+        m_BlurredBackground.SetActive(false);
+        Time.timeScale = 1;
+    }
+    public void TriggerOptionsPanel()
+    {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
+            TriggerPanel(m_MainMenuUI);
+        else
+            OpenPausePanel();
     }
 
     #region Sound Management

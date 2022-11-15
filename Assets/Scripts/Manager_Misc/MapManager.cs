@@ -9,6 +9,30 @@ using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour
 {
+    #region Singleton
+    private static MapManager instance;
+    public static MapManager Instance { get { return instance; } }
+
+    private void Initialize()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
+    private void Terminate()
+    {
+        if (this == Instance)
+        {
+            instance = null;
+        }
+    }
+    #endregion
     [SerializeField] private Color m_VisitedColor;
     [SerializeField] private Color m_NormalColor;
     [SerializeField] private Color m_CurrentZoneColor;
@@ -35,6 +59,8 @@ public class MapManager : MonoBehaviour
 
     private void Awake()
     {
+        Initialize();
+
         GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").started += OnMiniMap;
         GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").canceled += OnMiniMap;
 
@@ -49,6 +75,24 @@ public class MapManager : MonoBehaviour
 
         GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").performed += OnZoom;
         GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").canceled += OnZoom;
+    }
+
+    public void RemoveBindings()
+    {
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").started -= OnMiniMap;
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MiniMap").canceled -= OnMiniMap;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MaxiMap").performed -= OnMaxiMap;
+        GameManager.Instance.PlayerInput.actions.actionMaps[0].FindAction("MaxiMap").canceled -= OnMaxiMap;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Move").performed -= OnMove;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Move").canceled -= OnMove;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Close").performed -= OnClose;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Close").canceled -= OnClose;
+
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").performed -= OnZoom;
+        GameManager.Instance.PlayerInput.actions.actionMaps[3].FindAction("Zoom").canceled -= OnZoom;
     }
 
     private void Start()
@@ -192,5 +236,10 @@ public class MapManager : MonoBehaviour
             if (mapBoundsMax.y < ZoneManager.Instance.Zones[i].transform.position.y)
                 mapBoundsMax.y = ZoneManager.Instance.Zones[i].transform.position.y;
         }
+    }
+
+    private void OnDestroy()
+    {
+        Terminate();
     }
 }

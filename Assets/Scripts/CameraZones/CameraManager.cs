@@ -18,7 +18,6 @@ public class CameraManager : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
     }
 
@@ -82,6 +81,8 @@ public class CameraManager : MonoBehaviour
     }
     private void Update()
     {
+        if (PlayerController.Instance == null) return;
+
         currentZone = ZoneManager.Instance.CurrentActiveZone;
 
         if (currentZone != previousZone)
@@ -346,8 +347,11 @@ public class CameraManager : MonoBehaviour
             timer += Time.deltaTime;
 
             // adjust original position if the player moves outside the rect
-            if (!rect.Contains(objectToFollow.position) && Time.timeScale > 0f)
-                originalPos = cam.transform.localPosition;
+            if (PlayerController.Instance != null)
+            {
+                if (!rect.Contains(objectToFollow.position) && Time.timeScale > 0f)
+                    originalPos = cam.transform.localPosition;
+            }
 
             yield return null;
         }

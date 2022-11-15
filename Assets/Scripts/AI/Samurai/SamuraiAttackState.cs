@@ -24,6 +24,8 @@ public class SamuraiAttackState : AIState
     }
     public override void Update()
     {
+        if (PlayerController.Instance == null) return;
+
         shootCooldownTimer -= Time.deltaTime;
 
         if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= controller.AttackRange)

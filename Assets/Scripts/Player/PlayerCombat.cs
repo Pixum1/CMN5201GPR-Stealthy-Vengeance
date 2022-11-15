@@ -15,14 +15,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float m_BulletLifeTime;
     [SerializeField] private SpriteRenderer[] m_FloatingProjectiles;
 
-    private void Awake()
+    private void Start()
     {
         GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").performed += OnFire;
         GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").canceled += OnFire;
-    }
 
-    private void Start()
-    {
         mouse = Mouse.current;
         mainCam = Camera.main;
     }
@@ -93,5 +90,11 @@ public class PlayerCombat : MonoBehaviour
             Gizmos.color = Color.white;
             Gizmos.DrawWireSphere((Vector2)mainCam.ScreenToWorldPoint(mouse.position.ReadValue()), .25f);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").performed -= OnFire;
+        GameManager.Instance.PlayerInput.currentActionMap.FindAction("Fire").canceled -= OnFire;
     }
 }
