@@ -47,7 +47,7 @@ public class SaveSystem : MonoBehaviour
         saveFilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/StealthyVengeanceSaveFile.json";
 
         e_SaveGame = Save;
-        e_LoadGame = Load;
+         e_LoadGame = Load;
     }
 
     private void Save()
@@ -100,7 +100,7 @@ public class SaveSystem : MonoBehaviour
             AllowDashing = PlayerController.Instance.AllowDashing,
             AllowJumping = PlayerController.Instance.AllowJumping,
             AllowMoving = PlayerController.Instance.AllowMoving,
-            CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
+            //CollectedCollectibles = GameManager.Instance.CollectedCollectibles,
             CameraZones = GameManager.Instance.ZoneSaves,
             FakeLights = GameManager.Instance.FakeLightsSaves,
         };
@@ -118,7 +118,7 @@ public class SaveSystem : MonoBehaviour
         PlayerController.Instance.AllowDashing = _data.AllowDashing;
         PlayerController.Instance.AllowJumping = _data.AllowJumping;
         PlayerController.Instance.AllowMoving = _data.AllowMoving;
-        GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
+        //GameManager.Instance.CollectedCollectibles = _data.CollectedCollectibles;
 
         for (int i = 0; i < ZoneManager.Instance.Zones.Length; i++)
         {
@@ -156,7 +156,7 @@ public class SaveObject
     public bool AllowDashing;
     public bool AllowJumping;
     public bool AllowMoving;
-    public List<Item> CollectedCollectibles;
+    //public List<Item> CollectedCollectibles;
     public List<CameraZoneSaveData> CameraZones;
     public List<FakeLightSaveData> FakeLights;
 }

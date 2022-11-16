@@ -63,6 +63,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpriteRenderer m_CampfireTransitionImage;
     [SerializeField] private GameObject m_BlurredBackground;
     [SerializeField] private GameObject m_DeathPanel;
+    [SerializeField] private GameObject m_WinPanel;
 
     [Header("Cursor")]
     [SerializeField] private GameObject m_CursorObject;
@@ -144,6 +145,8 @@ public class UIManager : MonoBehaviour
         if (m_PausePanel.activeSelf)
             m_PausePanel.SetActive(false);
 
+        
+
         while (m_TransitionImage.color.a < 1)
         {
             color.a += Time.unscaledDeltaTime / m_TransitionSpeed;
@@ -151,12 +154,21 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
 
+        AsyncOperation load = SceneManager.LoadSceneAsync(0);
+        while (!load.isDone)
+        {
+            yield return null;
+        }
+
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+
         m_InGameUI.SetActive(false);
 
-        m_CursorSprite.sprite = m_MenuCursorTexture;
-        m_VFXCursorObject.SetActive(true);
+        #region Change Cursor
+        //m_CursorSprite.sprite = m_MenuCursorTexture;
+        //m_VFXCursorObject.SetActive(true);
+        #endregion
+
         color = new Color(0, 0, 0, 1);
 
         while (m_TransitionImage.color.a > 0)
@@ -200,7 +212,9 @@ public class UIManager : MonoBehaviour
             m_CampfireTransitionImage.color = color;
             yield return null;
         }
+
         color = new Color(0, 0, 0, 1);
+
         load.allowSceneActivation = true;
 
         while (!load.isDone)
@@ -208,27 +222,33 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
 
-        //while (m_TransitionImage.color.a > 0)
-        //{
-        //    color.a -= Time.unscaledDeltaTime / m_TransitionSpeed;
-        //    m_TransitionImage.color = color;
-        //    yield return null;
-        //}
-        //color = new Color(0, 0, 0, 0);
+        m_InGameUI.SetActive(true);
+        m_MainMenuUI.SetActive(false);
 
         if (!_newGameFlag)
             GameManager.Instance.OnLoadGame();
 
-        m_InGameUI.SetActive(true);
-        m_MainMenuUI.SetActive(false);
-        m_TransitionImage.color = new Color(0, 0, 0, 0);
+        yield return new WaitForSecondsRealtime(1f);
+
+        m_TransitionImage.color = color;
         m_CampfireTransitionImage.color = new Color(0, 0, 0, 0);
 
-        m_CursorSprite.sprite = m_InGameCursorTexture;
-        m_VFXCursorObject.SetActive(false);
+        while (m_TransitionImage.color.a > 0)
+        {
+            color.a -= Time.unscaledDeltaTime / m_TransitionSpeed;
+            m_TransitionImage.color = color;
+            yield return null;
+        }
+        m_TransitionImage.color = new Color(0, 0, 0, 0);
+
+        color = new Color(0, 0, 0, 0);
+
+        #region Change cursor
+        //m_CursorSprite.sprite = m_InGameCursorTexture;
+        //m_VFXCursorObject.SetActive(false);
+        #endregion
 
         GameManager.Instance.PlayerInput.actions.actionMaps[0].Enable();
-
     }
     public void OpenDeathPanel()
     {
@@ -293,6 +313,24 @@ public class UIManager : MonoBehaviour
             OpenPausePanel();
     }
 
+    public void ShowWinPanel()
+    {
+        for (int i = 0; i < m_MenuItems.Length; i++)
+        {
+            m_MenuItems[i].SetActive(false);
+        }
+        m_WinPanel.SetActive(true);
+        m_BlurredBackground.SetActive(true);
+    }
+    public void CloseWinPanel()
+    {
+        for (int i = 0; i < m_MenuItems.Length; i++)
+        {
+            m_MenuItems[i].SetActive(false);
+        }
+        m_WinPanel.SetActive(false);
+        m_BlurredBackground.SetActive(false);
+    }
     #region Sound Management
     public void ChangeMasterVolume(float _volume)
     {

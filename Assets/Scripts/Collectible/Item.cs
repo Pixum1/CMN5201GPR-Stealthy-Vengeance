@@ -21,9 +21,9 @@ public abstract class Item : MonoBehaviour, ICollectable
 
     private void Start()
     {
-        SaveSystem.Instance.e_LoadGame += OnRespawn;
+        //SaveSystem.Instance.e_LoadGame += OnRespawn;
 
-        OnRespawn();
+        //OnRespawn();
 
         despawnTimer = despawnTime;
     }
