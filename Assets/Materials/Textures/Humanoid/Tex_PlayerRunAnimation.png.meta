@@ -121,9 +121,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
-        width: 16
-        height: 17
+        y: 0
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,10 +141,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_1
       rect:
         serializedVersion: 2
-        x: 17
+        x: 20
         y: 0
-        width: 15
-        height: 19
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,10 +162,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_2
       rect:
         serializedVersion: 2
-        x: 34
+        x: 40
         y: 0
-        width: 13
-        height: 18
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -183,10 +183,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_3
       rect:
         serializedVersion: 2
-        x: 49
-        y: 1
-        width: 14
-        height: 19
+        x: 60
+        y: 0
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -204,10 +204,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 2
-        width: 16
-        height: 17
+        x: 80
+        y: 0
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -225,10 +225,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_5
       rect:
         serializedVersion: 2
-        x: 81
+        x: 100
         y: 0
-        width: 14
-        height: 19
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -246,10 +246,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_6
       rect:
         serializedVersion: 2
-        x: 98
+        x: 120
         y: 0
-        width: 13
-        height: 18
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -267,10 +267,10 @@ TextureImporter:
       name: Tex_PlayerRunAnimation_7
       rect:
         serializedVersion: 2
-        x: 114
-        y: 1
-        width: 14
-        height: 18
+        x: 140
+        y: 0
+        width: 20
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -165,8 +165,8 @@ public class UIManager : MonoBehaviour
         m_InGameUI.SetActive(false);
 
         #region Change Cursor
-        //m_CursorSprite.sprite = m_MenuCursorTexture;
-        //m_VFXCursorObject.SetActive(true);
+        m_CursorSprite.sprite = m_MenuCursorTexture;
+        m_VFXCursorObject.SetActive(true);
         #endregion
 
         color = new Color(0, 0, 0, 1);
@@ -225,6 +225,11 @@ public class UIManager : MonoBehaviour
         m_InGameUI.SetActive(true);
         m_MainMenuUI.SetActive(false);
 
+        #region Change cursor
+        m_CursorSprite.sprite = m_InGameCursorTexture;
+        m_VFXCursorObject.SetActive(false);
+        #endregion
+
         if (!_newGameFlag)
             GameManager.Instance.OnLoadGame();
 
@@ -243,10 +248,6 @@ public class UIManager : MonoBehaviour
 
         color = new Color(0, 0, 0, 0);
 
-        #region Change cursor
-        //m_CursorSprite.sprite = m_InGameCursorTexture;
-        //m_VFXCursorObject.SetActive(false);
-        #endregion
 
         GameManager.Instance.PlayerInput.actions.actionMaps[0].Enable();
     }

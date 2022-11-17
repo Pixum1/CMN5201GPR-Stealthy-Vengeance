@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int amountOfJumps = 1; // The amount of additional jumps the player can make
     [SerializeField] private float m_AirborneSteer = 35f;
     [SerializeField] private VisualEffect m_JumpParticles;
-    [SerializeField] private VisualEffect m_LandingParticles; 
+    [SerializeField] private VisualEffect m_LandingParticles;
     private int jumpsCounted;
     private Vector2 lastJumpPos;
 
@@ -97,6 +97,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpriteRenderer m_SpriteRenderer;
     [SerializeField] private CollisionCheck cc;
     [SerializeField] private ScriptableInt m_PlayerHealth;
+    [SerializeField] private Animator m_Animator;
     public Health Health;
     private Camera mainCam;
     private Mouse mouse;
@@ -188,35 +189,89 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
 
+        Debug.Log(canWallHop);
+
         mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
 
         #region Player looking rotation
         if (lookAtMouse)
         {
-            if (mousePos.x < transform.position.x)
+            if (canWallHang)
             {
-                facingRight = false;
-                m_SpriteRenderer.flipX = true;
+                if (cc.m_IsOnLeftWall)
+                    m_SpriteRenderer.flipX = false;
+                else if (cc.m_IsOnRightWall)
+                    m_SpriteRenderer.flipX = true;
             }
-            else if (mousePos.x > transform.position.x)
+            else
             {
-                facingRight = true;
-                m_SpriteRenderer.flipX = false;
+                if (mousePos.x < transform.position.x)
+                {
+                    facingRight = false;
+                    m_SpriteRenderer.flipX = true;
+                }
+                else if (mousePos.x > transform.position.x)
+                {
+                    facingRight = true;
+                    m_SpriteRenderer.flipX = false;
+                }
             }
         }
         else
         {
-            if (horizontalDir < 0)
+            if (canWallHang)
             {
-                facingRight = false;
-                m_SpriteRenderer.flipX = true;
+                if (cc.m_IsOnLeftWall)
+                    m_SpriteRenderer.flipX = false;
+                else if (cc.m_IsOnRightWall)
+                    m_SpriteRenderer.flipX = true;
             }
-            else if (horizontalDir > 0)
+            else
             {
-                facingRight = true;
-                m_SpriteRenderer.flipX = false;
+                if (horizontalDir < 0)
+                {
+                    facingRight = false;
+                    m_SpriteRenderer.flipX = true;
+                }
+                else if (horizontalDir > 0)
+                {
+                    facingRight = true;
+                    m_SpriteRenderer.flipX = false;
+                }
             }
         }
+        #endregion
+
+        #region Animation
+
+        // Jump & Fall Animation
+        if (!canWallHang)
+        {
+            if (RigidBody.velocity.y > 7)
+                m_Animator.SetTrigger("Jumping");
+            else if (RigidBody.velocity.y < -7)
+                m_Animator.SetTrigger("Falling");
+        }
+
+        // WallHang & Climb Animation
+        if (canWallHang)
+        {
+            if (verticalDir == 0)
+                m_Animator.SetTrigger("WallHang");
+
+            if (allowWallClimb && verticalDir != 0)
+                m_Animator.SetTrigger("WallClimb");
+        }
+        // Run and Idle Animation
+        if (cc.m_IsGrounded && !canWallHang)
+        {
+            if (canMove)
+                m_Animator.SetTrigger("Running");
+            else
+                m_Animator.SetTrigger("Idle");
+        }
+
+
         #endregion
 
         if (IsInEvent) return; // !!!DONT RUN CODE BELOW IF IS IN EVENT!!!
@@ -247,16 +302,20 @@ public class PlayerController : MonoBehaviour
             {
                 isDashing = false;
 
+                //if (allowWallClimb && verticalDir != 0)
                 ApplyWallHangGravity();
-
-                if (allowWallHops)
-                    jumpsCounted = amountOfJumps - 1;
-
-                if ((cc.m_IsOnLeftWall && horizontalDir > 0) || (cc.m_IsOnRightWall && horizontalDir < 0))
-                    wallHopBufferTimer = 0;
             }
             else
                 ApplyFallGravity();
+        }
+        if (allowWallHops && canWallHang)
+        {
+            jumpsCounted = amountOfJumps - 1;
+
+            if (((cc.m_IsOnLeftWall && horizontalDir < 0) || (cc.m_IsOnRightWall && horizontalDir > 0)) && jumpBufferTimer < jumpBufferTime)
+            {
+                wallHopBufferTimer = 0;
+            }
         }
 
 
@@ -286,16 +345,17 @@ public class PlayerController : MonoBehaviour
 
             if (canJump)
             {
-                // Is on wall and jumps against it (climb with jumps)
-                if (canWallHang && canWallHop)
-                    Jump(wallHopHeight, new Vector2(-horizontalDir / 2f, 1f));
                 // Normal jump
-                else if (!canWallHang)
+                if (!canWallHang)
                     Jump(jumpHeight, Vector2.up);
             }
             // is on wall and climbs it
             if (canWallHang && allowWallClimb)
                 Climb();
+
+            // Is on wall and jumps against it (climb with jumps)
+            if (canWallHang && canWallHop)
+                Jump(wallHopHeight, new Vector2(-horizontalDir / 2f, 1f));
         }
 
         // has performed a dash and has an additional jump ready
