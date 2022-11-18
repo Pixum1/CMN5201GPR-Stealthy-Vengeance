@@ -250,7 +250,7 @@ MonoBehaviour:
   VisionRange: 10
   Health: {fileID: 280047825356814085}
   SpriteRenderer: {fileID: 7262624198383323700}
-  rb: {fileID: 0}
+  rb: {fileID: 7262624197494182397}
   EnemyData:
     EnemyPrefab: {fileID: 0}
     SpawnPoint: {x: 0, y: 0}

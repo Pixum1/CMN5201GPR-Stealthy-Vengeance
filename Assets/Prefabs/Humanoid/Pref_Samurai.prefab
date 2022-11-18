@@ -353,8 +353,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SeesPlayer: 0
   IdleTime: 1
-  Speed: 4
-  AttackRange: 12
+  Speed: 5
+  AttackRange: 10
   VisionRange: 15
   Health: {fileID: 722244918629651833}
   SpriteRenderer: {fileID: 7262624198383323700}
@@ -367,7 +367,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 1827334929654878298, guid: 4dcaf0c1758403648b106a5deb4829ab, type: 3}
   Drops:
   - Item: {fileID: 1291248816338897808, guid: 875aa9494c9959d4d92cd6d456648ceb, type: 3}
-    DropChance: 0.25
+    DropChance: 0.66
     Despawn: 1
     DespawnTime: 10
   ObstacleLayer:

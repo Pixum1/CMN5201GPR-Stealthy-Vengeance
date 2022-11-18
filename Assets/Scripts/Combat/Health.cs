@@ -7,7 +7,7 @@ using UnityEngine.VFX;
 public class Health : MonoBehaviour, IDamagable
 {
     protected int hp;
-    public int HP { get { return hp; } set { hp = value; } }
+    public int HP { get { return hp; } set { if (hp + value < MaxHP) hp = value; } }
 
     [SerializeField] protected int m_MaxHP;
     public int MaxHP { get { return m_MaxHP; } set { m_MaxHP = value; } }
@@ -23,21 +23,20 @@ public class Health : MonoBehaviour, IDamagable
 
     private void SetHP()
     {
-        hp = MaxHP;
+        HP = MaxHP;
     }
 
     public virtual void AddHP(int _amount)
     {
-        if (hp < MaxHP)
-            hp += _amount;
+        HP += _amount;
     }
 
     public virtual void GetDamage(int _value, Vector3 _knockbackDir)
     {
-        if (hp > 0)
-            hp -= _value;
+        if (HP > 0)
+            HP -= _value;
 
-        if (hp <= 0)
+        if (HP <= 0)
             E_TriggerDeath?.Invoke();
     }
 }

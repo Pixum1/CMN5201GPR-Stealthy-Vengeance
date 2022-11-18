@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.VFX;
 
 public class CameraZone : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public class CameraZone : MonoBehaviour
     [Header("Boss Room")]
     [SerializeField] private EnemyWaves[] m_Waves;
     [SerializeField] private GameObject[] m_EntranceBarriers;
+    [SerializeField] private VisualEffect[] m_WinParticles;
     private enum EUnlockAbility
     {
         none,
@@ -100,7 +102,6 @@ public class CameraZone : MonoBehaviour
         // Register this room to the GameManager
         GameManager.Instance.ZoneSaves.Add(new CameraZoneSaveData(ID, WasVisited));
     }
-
     public void UpdateRoom()
     {
         CheckForPlayer();
@@ -187,8 +188,12 @@ public class CameraZone : MonoBehaviour
                 PlayerController.Instance.AllowDashing = true;
                 break;
         }
+
         // Play animation or particles
-        //ZoneManager.Instance.EndEncounterEvent.RaiseEvent();
+        for (int i = 0; i < m_WinParticles.Length; i++)
+        {
+            m_WinParticles[i].Play();
+        }
     }
 
     private IEnumerator MovePlayerToPos(Vector2 _pos)
@@ -203,8 +208,8 @@ public class CameraZone : MonoBehaviour
         rb.velocity = Vector2.zero;
 
         float xDir = Mathf.Sign(_pos.x - p.transform.position.x);
-        float acceleration = 70f;
-        float maxSpeed = 7f;
+        float acceleration = 100f;
+        float maxSpeed = 8f;
 
         while (((Vector2)p.transform.position - _pos).sqrMagnitude > 1f)
         {
@@ -273,12 +278,4 @@ public class CameraZone : MonoBehaviour
         }
         #endregion
     }
-    //private void OnValidate()
-    //{
-    //    if (MapVisual != null)
-    //    {
-    //        MapVisual.transform.localScale = new Vector2(1 / transform.localScale.x, 1 / transform.localScale.y);
-    //        MapVisual.size = transform.localScale;
-    //    }
-    //}
 }

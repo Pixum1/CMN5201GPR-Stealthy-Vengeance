@@ -265,7 +265,7 @@ public class PlayerController : MonoBehaviour
         // Run and Idle Animation
         if (cc.m_IsGrounded && !canWallHang)
         {
-            if (canMove)
+            if (Mathf.Abs(RigidBody.velocity.x) > 7)
                 m_Animator.SetTrigger("Running");
             else
                 m_Animator.SetTrigger("Idle");

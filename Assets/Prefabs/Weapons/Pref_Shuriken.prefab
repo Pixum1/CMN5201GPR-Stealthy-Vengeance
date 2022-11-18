@@ -180,7 +180,7 @@ MonoBehaviour:
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 8
-  Cooldown: 0.25
+  Cooldown: 0.5
 --- !u!58 &2112695659873490070
 CircleCollider2D:
   m_ObjectHideFlags: 0
