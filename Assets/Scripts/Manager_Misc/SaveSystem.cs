@@ -32,7 +32,7 @@ public class SaveSystem : MonoBehaviour
     }
     #endregion
 
-    private string saveFilePath;
+    public string saveFilePath;
 
     [SerializeField] private ScriptableInt m_PlayerHealth;
 

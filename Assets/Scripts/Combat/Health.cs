@@ -7,7 +7,7 @@ using UnityEngine.VFX;
 public class Health : MonoBehaviour, IDamagable
 {
     protected int hp;
-    public int HP { get { return hp; } set { if (hp + value < MaxHP) hp = value; } }
+    public int HP { get { return hp; } set { hp = value; } }
 
     [SerializeField] protected int m_MaxHP;
     public int MaxHP { get { return m_MaxHP; } set { m_MaxHP = value; } }
@@ -23,7 +23,7 @@ public class Health : MonoBehaviour, IDamagable
 
     private void SetHP()
     {
-        HP = MaxHP;
+        hp = MaxHP;
     }
 
     public virtual void AddHP(int _amount)

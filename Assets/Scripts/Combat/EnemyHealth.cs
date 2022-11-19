@@ -37,8 +37,16 @@ public class EnemyHealth : Health
             m_BloodParticles.transform.SetParent(null);
             m_DespawnParticles.transform.SetParent(null);
             m_DespawnParticles.Play();
+
+            Invoke(nameof(DestroyParticles), 5f);
         }
 
+
         base.GetDamage(_value, _knockbackDir);
+    }
+    private void DestroyParticles()
+    {
+        Destroy(m_BloodParticles.gameObject);
+        Destroy(m_DespawnParticles.gameObject);
     }
 }

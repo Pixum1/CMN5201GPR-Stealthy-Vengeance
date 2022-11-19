@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
+using TMPro;
+using System.IO;
 
 public class UIManager : MonoBehaviour
 {
@@ -64,6 +66,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject m_BlurredBackground;
     [SerializeField] private GameObject m_DeathPanel;
     [SerializeField] private GameObject m_WinPanel;
+    [SerializeField] private TMP_Text m_UnlockAbilityText;
+    [SerializeField] private Button m_LoadButton;
+    [SerializeField] private Button m_LoadButtonInGame;
 
     [Header("Cursor")]
     [SerializeField] private GameObject m_CursorObject;
@@ -84,6 +89,12 @@ public class UIManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
             OpenPausePanel();
+    }
+
+    public void ShowUnlockAbilityText(string _abilityName)
+    {
+        m_UnlockAbilityText.text = _abilityName + " unlocked";
+        m_UnlockAbilityText.GetComponent<Animator>().SetTrigger("Show");
     }
 
     private void UpdateHealthBar()
@@ -114,6 +125,17 @@ public class UIManager : MonoBehaviour
             m_MasterSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
             m_SfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
             m_MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+
+            if (File.Exists(SaveSystem.Instance.saveFilePath))
+            {
+                m_LoadButtonInGame.interactable = true;
+                m_LoadButton.interactable = true;
+            }
+            else
+            {
+                m_LoadButtonInGame.interactable = false;
+                m_LoadButton.interactable = false;
+            }
         }
     }
 
@@ -126,8 +148,6 @@ public class UIManager : MonoBehaviour
         mousePos = new Vector3(mousePos.x, mousePos.y, 0);
 
         m_CursorObject.transform.position = mousePos;
-
-
     }
     public void LoadMenu()
     {
@@ -145,7 +165,7 @@ public class UIManager : MonoBehaviour
         if (m_PausePanel.activeSelf)
             m_PausePanel.SetActive(false);
 
-        
+
 
         while (m_TransitionImage.color.a < 1)
         {

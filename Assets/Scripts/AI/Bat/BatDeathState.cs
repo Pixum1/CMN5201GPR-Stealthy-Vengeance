@@ -30,7 +30,8 @@ public class BatDeathState : AIState
     {
         controller.SpriteRenderer.color = Color.red;
         data.SpawnDrops(controller.transform.position);
-        GameObject.Destroy(controller.gameObject);
+        controller.transform.gameObject.SetActive(false);
+        GameObject.Destroy(controller.gameObject, 5.1f);
         Debug.LogWarning("Enemy Died!");
     }
 }

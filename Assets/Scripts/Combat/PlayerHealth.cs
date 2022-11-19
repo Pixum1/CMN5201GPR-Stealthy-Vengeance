@@ -14,6 +14,8 @@ public class PlayerHealth : Health
     public override void AddHP(int _amount)
     {
         m_PlayerHealth.Value += _amount;
+
+        m_PlayerHealth.Value = Mathf.Clamp(m_PlayerHealth.Value, 0, MaxHP);
     }
     public override void GetDamage(int _value, Vector3 _knockbackDir)
     {

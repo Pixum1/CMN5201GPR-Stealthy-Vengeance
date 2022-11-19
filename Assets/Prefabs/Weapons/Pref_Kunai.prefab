@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b69d9d47a464f774bb8b6a919afea1c5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -155,11 +155,11 @@ MonoBehaviour:
   m_Rb: {fileID: 6970141249066623765}
   m_Damage: 1
   m_SpriteRenderer: {fileID: 4493311988437260406}
-  shootForce: 25
+  shootForce: 20
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 8
-  Cooldown: 0.5
+  Cooldown: 1
 --- !u!58 &2112695659873490070
 CircleCollider2D:
   m_ObjectHideFlags: 0

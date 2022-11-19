@@ -188,9 +188,6 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-
-        Debug.Log(canWallHop);
-
         mousePos = mainCam.ScreenToWorldPoint(mouse.position.ReadValue());
 
         #region Player looking rotation

@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Rb: {fileID: 6970141249066623765}
   m_Damage: 1
   m_SpriteRenderer: {fileID: 4493311988437260406}
-  shootForce: 25
+  shootForce: 20
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 8

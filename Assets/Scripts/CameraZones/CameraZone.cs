@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.VFX;
+using TMPro;
 
 public class CameraZone : MonoBehaviour
 {
@@ -167,27 +168,37 @@ public class CameraZone : MonoBehaviour
         // Open doors
         OpenEntrance();
 
+        string ability = "";
+
         // Unlock Ability
         switch (m_UnlockAbility)
         {
             case EUnlockAbility.none:
                 break;
             case EUnlockAbility.wallHang:
+                ability = "Wall hang";
                 PlayerController.Instance.AllowWallHang = true;
                 break;
             case EUnlockAbility.wallClimb:
+                ability = "Wall climb";
                 PlayerController.Instance.AllowWallClimb = true;
                 break;
             case EUnlockAbility.wallHop:
+                ability = "Wall hops";
                 PlayerController.Instance.AllowWallHops = true;
                 break;
             case EUnlockAbility.doubleJump:
+                ability = "Double jump";
                 PlayerController.Instance.AmountOfJumps = 2;
                 break;
             case EUnlockAbility.dash:
+                ability = "Dash";
                 PlayerController.Instance.AllowDashing = true;
                 break;
         }
+
+        // show unlock ability text
+        UIManager.Instance.ShowUnlockAbilityText(ability);
 
         // Play animation or particles
         for (int i = 0; i < m_WinParticles.Length; i++)

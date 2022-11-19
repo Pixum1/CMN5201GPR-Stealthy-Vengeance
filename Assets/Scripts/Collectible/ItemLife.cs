@@ -7,6 +7,6 @@ public class ItemLife : Item
     public override void OnCollect()
     {
         SoundManager.Instance.PlaySound(SoundManager.Instance.LifeGainSound);
-        PlayerController.Instance.Health.AddHP(1);
+        PlayerController.Instance.Health.AddHP(2);
     }
 }
