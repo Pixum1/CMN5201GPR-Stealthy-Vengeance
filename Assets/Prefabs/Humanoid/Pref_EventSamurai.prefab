@@ -365,7 +365,11 @@ MonoBehaviour:
     Waypoints: []
   Path: {fileID: 0}
   ProjectilePrefab: {fileID: 1827334929654878298, guid: 4dcaf0c1758403648b106a5deb4829ab, type: 3}
-  Drops: []
+  Drops:
+  - Item: {fileID: 1291248816338897808, guid: 875aa9494c9959d4d92cd6d456648ceb, type: 3}
+    DropChance: 0.25
+    Despawn: 1
+    DespawnTime: 5
   ObstacleLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -382,7 +386,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaxHP: 3
-  m_DamageParticles: {fileID: 0}
   m_Rb: {fileID: 7262624197494182397}
   m_KnockbackForce: 0.5
   m_BloodParticles: {fileID: 5706188848246266584}

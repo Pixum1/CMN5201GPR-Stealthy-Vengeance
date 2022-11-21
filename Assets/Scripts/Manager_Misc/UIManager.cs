@@ -90,7 +90,10 @@ public class UIManager : MonoBehaviour
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
             OpenPausePanel();
     }
-
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
     public void ShowUnlockAbilityText(string _abilityName)
     {
         m_UnlockAbilityText.text = _abilityName + " unlocked";
@@ -287,10 +290,6 @@ public class UIManager : MonoBehaviour
         }
         m_DeathPanel.SetActive(false);
         m_BlurredBackground.SetActive(false);
-    }
-    public void ExitGame()
-    {
-        Application.Quit();
     }
     public void TriggerPanel(GameObject _panel)
     {

@@ -156,6 +156,8 @@ public class CameraZone : MonoBehaviour
         // Close entrances
         CloseEntrance();
 
+        yield return new WaitForSeconds(2f);
+
         // Start Wave 1 & wait untill all enemies of that wave spawned
         // Then spawn next Wave
         for (int i = 0; i < m_Waves.Length; i++)
@@ -196,6 +198,9 @@ public class CameraZone : MonoBehaviour
                 PlayerController.Instance.AllowDashing = true;
                 break;
         }
+
+        // Reset player health
+        PlayerController.Instance.Health.AddHP(10000);
 
         // show unlock ability text
         UIManager.Instance.ShowUnlockAbilityText(ability);

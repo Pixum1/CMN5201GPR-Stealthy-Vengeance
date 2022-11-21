@@ -10,6 +10,12 @@ public class EnemyHealth : Health
     [SerializeField] private VisualEffect m_BloodParticles;
     [SerializeField] private VisualEffect m_DespawnParticles;
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        m_DespawnParticles.Play();
+    }
     public override void GetDamage(int _value, Vector3 _knockbackDir)
     {
         CameraManager.Instance.Shake();

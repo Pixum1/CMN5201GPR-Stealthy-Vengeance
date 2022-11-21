@@ -14,9 +14,7 @@ public class Health : MonoBehaviour, IDamagable
 
     public Action E_TriggerDeath;
 
-    [SerializeField] private VisualEffect m_DamageParticles;
-
-    private void Awake()
+    protected virtual void Awake()
     {
         SetHP();
     }
