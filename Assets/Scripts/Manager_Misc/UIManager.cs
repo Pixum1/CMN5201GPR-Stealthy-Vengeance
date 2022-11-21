@@ -96,7 +96,6 @@ public class UIManager : MonoBehaviour
         m_UnlockAbilityText.text = _abilityName + " unlocked";
         m_UnlockAbilityText.GetComponent<Animator>().SetTrigger("Show");
     }
-
     private void UpdateHealthBar()
     {
         for (int i = 1; i < m_HealthContainer.Length + 1; i++)

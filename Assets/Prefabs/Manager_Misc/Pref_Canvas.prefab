@@ -2410,7 +2410,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282137660
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2874,6 +2874,7 @@ MonoBehaviour:
   m_WinPanel: {fileID: 1877947176801931643}
   m_UnlockAbilityText: {fileID: 1890737704583232140}
   m_LoadButton: {fileID: 3476117316107851821}
+  m_LoadButtonInGame: {fileID: 0}
   m_CursorObject: {fileID: 3476117315945033924}
   m_VFXCursorObject: {fileID: 3476117316420959184}
   m_MenuCursorTexture: {fileID: 21300000, guid: c235edf007644ea47acdce5e7b15eadb, type: 3}
