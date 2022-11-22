@@ -49,7 +49,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AudioMixer m_Mixer;
     [SerializeField] private Slider m_MasterSlider;
     [SerializeField] private Slider m_SfxSlider;
-    [SerializeField] private Slider m_MusicSlider;
 
     [Header("Level Transitions")]
     [SerializeField] private float m_TransitionSpeed;
@@ -124,9 +123,10 @@ public class UIManager : MonoBehaviour
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
         {
             // set default sound settings
-            m_MasterSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1f);
-            m_SfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
-            m_MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+            m_MasterSlider.value = PlayerPrefs.GetFloat("Master", 1f);
+            m_SfxSlider.value = PlayerPrefs.GetFloat("SFX", 1f);
+
+            
 
             if (File.Exists(SaveSystem.Instance.saveFilePath))
             {
@@ -351,20 +351,15 @@ public class UIManager : MonoBehaviour
         m_BlurredBackground.SetActive(false);
     }
     #region Sound Management
-    public void ChangeMasterVolume(float _volume)
+    public void ChangeMasterVolume()
     {
-        m_Mixer.SetFloat("MasterVolume", Mathf.Log10(_volume) * 20f);
-        SaveVolumeLevel(m_MasterSlider, "MasterVolume");
+        m_Mixer.SetFloat("Master", Mathf.Log10(m_MasterSlider.value) * 20f);
+        SaveVolumeLevel(m_MasterSlider, "Master");
     }
-    public void ChangeSFXVolume(float _volume)
+    public void ChangeSFXVolume()
     {
-        m_Mixer.SetFloat("SFXVolume", Mathf.Log10(_volume) * 20f);
-        SaveVolumeLevel(m_SfxSlider, "SFXVolume");
-    }
-    public void ChangeMusicVolume(float _volume)
-    {
-        m_Mixer.SetFloat("MusicVolume", Mathf.Log10(_volume) * 20f);
-        SaveVolumeLevel(m_MusicSlider, "MusicVolume");
+        m_Mixer.SetFloat("SFX", Mathf.Log10(m_SfxSlider.value) * 20f);
+        SaveVolumeLevel(m_SfxSlider, "SFX");
     }
 
     private void SaveVolumeLevel(Slider _slider, string _prefsName)
