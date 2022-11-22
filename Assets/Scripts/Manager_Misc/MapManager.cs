@@ -97,9 +97,9 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
+        CalculateBounds();
         cam = GetComponent<Camera>();
 
-        CalculateBounds();
     }
     private void Update()
     {
@@ -119,6 +119,9 @@ public class MapManager : MonoBehaviour
     }
     public void OnMaxiMap(CallbackContext _ctx)
     {
+        if(mapBoundsMax == Vector2.zero && mapBoundsMin == Vector2.zero)
+            CalculateBounds();
+
         OpenMaxiMap();
     }
     public void OnClose(CallbackContext _ctx)
@@ -129,6 +132,8 @@ public class MapManager : MonoBehaviour
     {
         if (_ctx.performed)
             maximapCoords = _ctx.ReadValue<Vector2>();
+
+        Debug.LogError(maximapCoords);
 
         if (_ctx.canceled)
             maximapCoords = Vector2.zero;

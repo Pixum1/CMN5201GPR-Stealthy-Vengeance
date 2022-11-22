@@ -30,7 +30,6 @@ public class SamuraiRoamingState : AIState
 
         if (((Vector2)controller.transform.position - targetDestination).sqrMagnitude >= Mathf.Pow(.5f, 2))
         {
-            Debug.Log("HUH");
             controller.Anim.SetTrigger("Run");
         }
     }
