@@ -305,7 +305,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.041520014, y: 0}
+  m_Offset: {x: 0.035394907, y: -0.35729915}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -316,7 +316,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.57175696, y: 1.6200001}
+  m_Size: {x: 0.7228434, y: 1.3219107}
   m_EdgeRadius: 0
 --- !u!50 &7262624197494182397
 Rigidbody2D:
@@ -356,6 +356,7 @@ MonoBehaviour:
   Speed: 6
   AttackRange: 10
   VisionRange: 100
+  Anim: {fileID: 148077782898701505}
   Health: {fileID: 722244918629651833}
   SpriteRenderer: {fileID: 7262624198383323700}
   rb: {fileID: 7262624197494182397}
@@ -400,6 +401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7262624198383323701}
   - component: {fileID: 7262624198383323700}
+  - component: {fileID: 148077782898701505}
   m_Layer: 7
   m_Name: EnemyGFX
   m_TagString: Untagged
@@ -474,3 +476,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &148077782898701505
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7262624198383323702}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a637df0ecd8f9e74ebfe011edcf348a8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

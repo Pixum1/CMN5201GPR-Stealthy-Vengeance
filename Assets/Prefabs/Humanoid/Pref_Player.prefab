@@ -455,6 +455,7 @@ MonoBehaviour:
   m_SpriteRenderer: {fileID: 4333900427149535733}
   cc: {fileID: 4333900425158727658}
   m_PlayerHealth: {fileID: 11400000, guid: f6a0ac328f262944f8a34ba061a96195, type: 2}
+  m_Animator: {fileID: 0}
   Health: {fileID: 1940347140}
 --- !u!114 &4333900425158727658
 MonoBehaviour:
@@ -519,7 +520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaxHP: 10
-  m_DamageParticles: {fileID: 0}
   m_PlayerHealth: {fileID: 11400000, guid: f6a0ac328f262944f8a34ba061a96195, type: 2}
   m_Rb: {fileID: 4333900425158727652}
   m_KnockbackForce: 0.5
@@ -610,7 +610,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -652,7 +652,7 @@ Animator:
   m_GameObject: {fileID: 4333900425239553811}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58eda36952642164bb0f46d34f1bb180, type: 2}
+  m_Controller: {fileID: 9100000, guid: da9ebb8e75e2d3a4bb6ef0b1ae17b74f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -715,7 +715,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -757,7 +757,7 @@ Animator:
   m_GameObject: {fileID: 4333900425533234907}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58eda36952642164bb0f46d34f1bb180, type: 2}
+  m_Controller: {fileID: 9100000, guid: da9ebb8e75e2d3a4bb6ef0b1ae17b74f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -888,7 +888,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -930,7 +930,7 @@ Animator:
   m_GameObject: {fileID: 4333900426469817686}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58eda36952642164bb0f46d34f1bb180, type: 2}
+  m_Controller: {fileID: 9100000, guid: da9ebb8e75e2d3a4bb6ef0b1ae17b74f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1025,7 +1025,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1067,7 +1067,7 @@ Animator:
   m_GameObject: {fileID: 4333900426839990712}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58eda36952642164bb0f46d34f1bb180, type: 2}
+  m_Controller: {fileID: 9100000, guid: da9ebb8e75e2d3a4bb6ef0b1ae17b74f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1162,7 +1162,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6bfcf9de2c93b7a4f91779bccce7c6a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1204,7 +1204,7 @@ Animator:
   m_GameObject: {fileID: 4333900427098676650}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58eda36952642164bb0f46d34f1bb180, type: 2}
+  m_Controller: {fileID: 9100000, guid: da9ebb8e75e2d3a4bb6ef0b1ae17b74f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

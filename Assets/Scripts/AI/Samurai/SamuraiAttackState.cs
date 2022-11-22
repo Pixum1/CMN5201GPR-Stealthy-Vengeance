@@ -13,6 +13,9 @@ public class SamuraiAttackState : AIState
     private int maxAmmo = 4;
     private int ammoCount = 4;
 
+    int run;
+    int idle;
+
     public SamuraiAttackState(AIController _controller, EnemyData _enemy, Action _switchIdleState) : base(_controller, _enemy)
     {
         this.switchIdleState = _switchIdleState;
@@ -20,6 +23,9 @@ public class SamuraiAttackState : AIState
 
     public override void Enter()
     {
+        run = Animator.StringToHash("Run");
+        idle = Animator.StringToHash("Idle");
+
         shootCooldownTimer = controller.ProjectilePrefab.Cooldown;
     }
     public override void Update()
@@ -30,6 +36,8 @@ public class SamuraiAttackState : AIState
 
         if (Vector2.Distance(controller.transform.position, PlayerController.Instance.transform.position) <= controller.AttackRange)
         {
+            controller.Anim.SetTrigger(idle);
+
             controller.rb.drag = 50;
 
             if (ammoCount > 0)
@@ -54,6 +62,8 @@ public class SamuraiAttackState : AIState
         }
         else
         {
+            controller.Anim.SetTrigger(run);
+
             controller.rb.drag = 0;
             int dir = Mathf.CeilToInt(Mathf.Sign(PlayerController.Instance.transform.position.x - controller.transform.position.x));
 

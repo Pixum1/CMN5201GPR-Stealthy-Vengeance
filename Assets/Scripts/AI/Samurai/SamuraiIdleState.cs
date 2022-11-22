@@ -17,6 +17,7 @@ public class SamuraiIdleState : AIState
     public override void Enter()
     {
         currTime = controller.IdleTime;
+        controller.Anim.SetTrigger("Idle");
     }
     public override void Update()
     {
@@ -27,6 +28,6 @@ public class SamuraiIdleState : AIState
     }
     public override void Exit()
     {
-
+        controller.Anim.ResetTrigger("Idle");
     }
 }

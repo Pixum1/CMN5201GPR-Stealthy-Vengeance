@@ -18,7 +18,6 @@ public class SamuraiRoamingState : AIState
     public override void Enter()
     {
         roamTimer = roamExitTime;
-
         targetDestination = controller.transform.position;
 
         if (data.Waypoints == null)
@@ -28,10 +27,16 @@ public class SamuraiRoamingState : AIState
             if (data.Waypoints.Length > 0)
                 targetDestination = data.Waypoints[UnityEngine.Random.Range(0, data.Waypoints.Length)];
         }
+
+        if (((Vector2)controller.transform.position - targetDestination).sqrMagnitude >= Mathf.Pow(.5f, 2))
+        {
+            Debug.Log("HUH");
+            controller.Anim.SetTrigger("Run");
+        }
     }
     public override void Update()
     {
-        if (((Vector2)controller.transform.position - targetDestination).sqrMagnitude <= 0.25f)
+        if (((Vector2)controller.transform.position - targetDestination).sqrMagnitude <= Mathf.Pow(.25f, 2))
         {
             controller.rb.drag = 50;
             switchIdleState.Invoke();

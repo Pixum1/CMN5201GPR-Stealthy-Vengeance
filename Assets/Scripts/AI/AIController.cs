@@ -20,6 +20,7 @@ public abstract class AIController : MonoBehaviour, IAIControlls
     public float VisionRange;
 
     // References
+    public Animator Anim;
     public Health Health;
     public SpriteRenderer SpriteRenderer;
     public Rigidbody2D rb;
